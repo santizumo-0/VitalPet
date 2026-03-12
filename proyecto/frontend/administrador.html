@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalPet - Panel Administrativo</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(to bottom, #c8e9ea 0%, #a8d8d9 100%);
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    /* Header */
+    .header {
+      background-color: white;
+      border-radius: 30px;
+      padding: 10px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 700px;
+      margin: 20px auto;
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 20px;
+      z-index: 999;
+
+    }
+
+    .logo-icon {
+     width: 120px;
+    height: 120px;
+    background-color: transparent;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logout-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 20px;
+      background: #ff6b35;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+
+    .logout-link:hover {
+      background: #ff6b35;
+    }
+
+    /* Estadísticas */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 30px auto;
+      max-width: 1100px;
+      padding: 0 20px;
+    }
+
+    .stat-card {
+      background-color: white;
+      border: 2px solid #333;
+      border-radius: 40px;
+      padding: 25px 30px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .stat-icon { font-size: 32px; }
+    .stat-content { flex: 1; }
+    .stat-label { color: #999; font-size: 13px; margin-bottom: 5px; }
+    .stat-number { color: #333; font-size: 36px; font-weight: 700; }
+
+    /* Botones de navegación */
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+      margin: 10px auto 30px auto;
+      max-width: 1100px;
+      padding: 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background-color: #1e3a5f;
+      color: white;
+      padding: 12px 26px;
+      border-radius: 25px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-btn.purple { background-color: #1e3a5f; }
+    .nav-btn.green { background-color: #1e3a5f; }
+
+    .nav-btn.active {
+      outline: 3px solid rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Secciones */
+    .content-section {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .content-section.active { display: block; }
+
+    .section-title {
+      color: #333;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      margin-top: 10px;
+    }
+
+    /* Citas */
+    .appointments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .appointment-card {
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .appointment-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: #5b8fd6;
+      font-weight: 700;
+    }
+
+    .time-icon { font-size: 18px; }
+
+    .appointment-info {
+      margin-bottom: 5px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .appointment-info strong { color: #333; }
+
+    .appointment-actions {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-whatsapp { background-color: #1e3a5f; color: white; }
+    .btn-email { background-color: #1e3a5f; color: white; }
+    .btn-historial { background-color: #1e3a5f; color: white; }
+
+    .btn-whatsapp:hover { filter: brightness(0.95); }
+    .btn-email:hover { filter: brightness(0.95); }
+    .btn-historial:hover { filter: brightness(0.95); }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .status-pendiente { background-color: #fff3cd; color: #856404; }
+    .status-confirmada { background-color: #d4edda; color: #ff6b35; }
+    .status-rechazada { background-color: #f8d7da; color: #5cd4d8; }
+
+    /* Compras */
+    .purchases-table {
+      background-color: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background-color: #f8f9fa; }
+
+    th {
+      padding: 12px;
+      text-align: left;
+      font-size: 13px;
+      color: #666;
+      font-weight: 700;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    td {
+      padding: 15px 12px;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    tr:hover { background-color: #f8f9fa; }
+
+    /* Modal */
+    #historialModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    #historialModal.active { display: flex; }
+
+    .modal-box {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #dc3545;
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      cursor: pointer;
+      color: white;
+      transition: 0.2s;
+    }
+
+    .modal-close:hover {
+      background: #c82333;
+      transform: scale(1.03);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Footer */
+    .footer {
+      background-color: white;
+      padding: 40px 30px;
+      margin: 30px auto;
+      max-width: 1100px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .footer-title {
+      text-align: center;
+      color: #333;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .footer-subtitle {
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 40px;
+      font-size: 13px;
+    }
+
+    .footer-column h4 {
+      color: #333;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .footer-column p,
+    .footer-column a {
+      color: #666;
+      text-decoration: none;
+      line-height: 1.8;
+      display: block;
+    }
+
+    .footer-column a:hover { color: #4fc3f7; }
+
+    /* Badge 24 horas */
+    .badge-24 {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 110px;
+      height: 110px;
+      background-color: #00a8e8;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: 4px solid white;
+      z-index: 1000;
+    }
+
+    .badge-24 .emergencia { font-size: 14px; line-height: 1.2; }
+    .badge-24 .horas { font-size: 32px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .stats-container { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr; }
+
+      .appointment-actions {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 15px;
+      }
+
+      .header {
+        max-width: 95%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo-icon">
+      <img src="img/logo.jpeg" alt="Logo VitalPet" />
+    </div>
+
+    <a href="#" class="logout-link" id="logoutLink">Cerrar sesión</a>
+  </header>
+
+  <!-- Estadísticas -->
+  <section class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon"></div>
+      <div class="stat-content">
+        <div class="stat-label">Clientes Registrados</div>
+        <div class="stat-number" id="total-clientes">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"></div>
+      <div class="stat-content">
+        <div class="stat-label">Citas Estética</div>
+        <div class="stat-number" id="total-estetica">0</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"></div>
+      <div class="stat-content">
+        <div class="stat-label">Citas Veterinaria</div>
+        <div class="stat-number" id="total-veterinaria">0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botones -->
+  <nav class="nav-buttons">
+    <button class="nav-btn active" data-target="veterinaria">Citas Veterinaria</button>
+    <button class="nav-btn purple" data-target="estetica">Citas Estética & Peluquería</button>
+    <button class="nav-btn green" data-target="compras">Informe de Compras</button>
+    <button class="nav-btn" style="background-color:#1e3a5f;" data-target="productos"> Agregar Productos</button>
+  </nav>
+
+  <!-- Sección Veterinaria -->
+  <main>
+    <section class="content-section active" id="veterinaria">
+      <h2 class="section-title">Citas Veterinarias - Semana Actual</h2>
+      <div class="appointments-list" id="lista-citas-veterinaria"></div>
+    </section>
+
+    <!-- Sección Estética -->
+    <section class="content-section" id="estetica">
+      <h2 class="section-title">Citas Estética & Peluquería - Semana Actual</h2>
+      <div class="appointments-list" id="lista-citas-estetica"></div>
+    </section>
+
+    <!-- Sección Compras -->
+    <section class="content-section" id="compras">
+      <h2 class="section-title">Informe de Compras - Todas las Órdenes</h2>
+      <div id="lista-compras" style="margin-top: 20px;"></div>
+    </section>
+
+    <!-- Sección Productos -->
+    <section class="content-section" id="productos">
+      <h2 class="section-title"> Agregar Nuevo Producto</h2>
+      <div style="background:white; padding:30px; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1); max-width:600px; margin:20px auto;">
+        
+        <form id="formProducto" style="display:flex; flex-direction:column; gap:15px;">
+          
+          <!-- Nombre -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;"> Nombre del Producto *</label>
+            <input type="text" id="prod-nombre" placeholder="Ej: Alimento Premium para Perros" required 
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+          </div>
+
+          <!-- Descripción -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;"> Descripción *</label>
+            <textarea id="prod-descripcion" placeholder="Detalles completos del producto" rows="3" required
+                      style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; font-family:Arial;"></textarea>
+          </div>
+
+          <!-- Precio -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;"> Precio (COP) *</label>
+            <input type="number" id="prod-precio" placeholder="0.00" step="0.01" min="0" required
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+          </div>
+
+          <!-- Stock -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;">Stock *</label>
+            <input type="number" id="prod-stock" placeholder="0" min="0" required
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+          </div>
+
+          <!-- Categoría -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;"> Categoría *</label>
+            <select id="prod-categoria" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+              <option value="">-- Selecciona una categoría --</option>
+              <option value="1">Alimentos</option>
+              <option value="2">Accesorios</option>
+              <option value="3">Medicamentos</option>
+            </select>
+          </div>
+
+          <!-- Para Animal -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;">Para (Aplicable a) *</label>
+            <select id="prod-animal" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+              <option value="">-- Selecciona --</option>
+              <option value="perros">Perros</option>
+              <option value="gatos">Gatos</option>
+              <option value="ambos">Ambos (Perros y Gatos)</option>
+            </select>
+          </div>
+
+          <!-- Imagen -->
+          <div>
+            <label style="display:block; color:#333; font-weight:600; margin-bottom:5px;">Imagen del Producto *</label>
+            <input type="file" id="prod-imagen" accept="image/*" required
+                   style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+            <small style="color:#999;">Formatos: JPG, PNG, GIF (máx 5MB)</small>
+          </div>
+
+          <!-- Preview de imagen -->
+          <div id="previewImagen" style="display:none;">
+            <small style="color:#999;">Vista previa:</small>
+            <img id="imgPreview" style="width:150px; height:150px; border-radius:10px; object-fit:cover; margin-top:10px; border: 2px solid #ddd;">
+          </div>
+
+          <!-- Botones -->
+          <div style="display:flex; gap:10px; margin-top:15px;">
+            <button type="submit" style="flex:1; background:#4caf50; color:white; padding:12px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; transition:0.2s;"
+                    onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4caf50'">
+              ✓ Agregar Producto
+            </button>
+            <button type="reset" style="flex:1; background:#ff6b35; color:#ffffff; padding:12px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; transition:0.2s;"
+                    onmouseover="this.style.background='#777'" onmouseout="this.style.background='#999'">
+              ↻ Limpiar
+            </button>
+          </div>
+        </form>
+
+        <!-- Mensaje de estado -->
+        <div id="mensajeProducto" style="margin-top:15px; padding:12px; border-radius:8px; display:none; text-align:center; font-weight:600;"></div>
+      </div>
+
+      <!-- ===== SECCIÓN ELIMINAR PRODUCTOS ===== -->
+      <div style="background:white; padding:30px; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1); max-width:900px; margin:40px auto;">
+        <h3 style="color:#333; margin-bottom:20px; font-size:18px;"> Desactivar Productos</h3>
+        <p style="color:#666; font-size:13px; margin-bottom:20px;">Los productos desactivados no aparecerán en la tienda pero se mantienen en el histórico de compras.</p>
+        
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+          <button id="btnCargarProductos" style="background:#2196f3; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:600;">
+            Cargar Productos
+          </button>
+          <button id="btnLimpiarTodo" style="background:#f44336; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:600;">
+            Desactivar TODO
+          </button>
+        </div>
+
+        <div id="listaProductos" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:15px;">
+          <p style="color:#999; grid-column:1/-1; text-align:center;">Haz clic en "Cargar Productos" para comenzar</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Historial -->
+  <div id="historialModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="historialTitle">
+      <button class="modal-close" id="closeHistorial" aria-label="Cerrar modal">×</button>
+
+      <h2 id="historialTitle" style="margin-bottom: 18px; color:#333;">Historial de Mascota</h2>
+      <div id="historialContent">
+        <p style="color:#666;">Aquí se mostrará el historial de la mascota.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- JS mínimo (panel + modal) -->
+  <script src="js/storage.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    // ✅ Usar configuración dinámica del ambiente
+    const API_URL = (window.VITALPET?.API_BASE || 'http://localhost:5000/api') + '/admin';
+
+    // ============================================
+    // UTILITY: Obtener token admin
+    // ============================================
+    function obtenerToken() {
+      // ✅ Usar la clave correcta para token admin
+      const token = localStorage.getItem('vitalpet_admin_token');
+      if (!token) {
+        console.log('❌ Sin token admin, redirigiendo a login');
+        window.location.href = 'login.html';
+      }
+      return token;
+    }
+
+    // ============================================
+    // CARGAR ESTADÍSTICAS
+    // ============================================
+    async function cargarEstadisticas() {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/estadisticas`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar estadísticas');
+
+        const data = await response.json();
+        const stats = data.data;
+
+        console.log('📊 Estadísticas cargadas:', stats);
+        
+        document.getElementById('total-clientes').textContent = stats.clientesRegistrados || 0;
+        document.getElementById('total-estetica').textContent = stats.citasEsteticaPendientes || 0;
+        document.getElementById('total-veterinaria').textContent = stats.citasVeterinariaPendientes || 0;
+      } catch (error) {
+        console.error('❌ Error cargando estadísticas:', error);
+      }
+    }
+
+    // ============================================
+    // CARGAR CITAS
+    // ============================================
+    async function cargarCitas(tipo = 'todas') {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/citas`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar citas');
+
+        const data = await response.json();
+        const citas = data.data;
+
+        // Filtrar citas por tipo de servicio
+        const citasVeterinaria = citas.filter(c => c.servicio_tipo === 'veterinaria');
+        const citasEstetica = citas.filter(c => c.servicio_tipo === 'estetica');
+
+        mostrarCitas(citasVeterinaria, 'lista-citas-veterinaria');
+        mostrarCitas(citasEstetica, 'lista-citas-estetica');
+        
+        // Actualizar conteos
+        document.getElementById('total-veterinaria').textContent = citasVeterinaria.length;
+        document.getElementById('total-estetica').textContent = citasEstetica.length;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // ============================================
+    // MOSTRAR CITAS EN LISTA
+    // ============================================
+    function mostrarCitas(citas, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      if (citas.length === 0) {
+        container.innerHTML = '<p style="color:#999; padding:20px;">No hay citas pendientes</p>';
+        return;
+      }
+
+      citas.forEach(cita => {
+        const div = document.createElement('div');
+        div.className = 'appointment-card';
+        
+        // Determinar color de estado
+        let colorEstado = '#ff9500'; // Amarillo por defecto (pendiente)
+        if (cita.estado === 'confirmada') colorEstado = '#4caf50'; // Verde
+        if (cita.estado === 'cancelada' || cita.estado === 'rechazada') colorEstado = '#f44336'; // Rojo
+        
+        // Mostrar botones solo si está pendiente
+        const botones = cita.estado === 'pendiente' ? `
+          <button class="btn-action aceptar" onclick="aceptarCita(${cita.id})">✓ Aceptar</button>
+          <button class="btn-action rechazar" onclick="rechazarCita(${cita.id})">✗ Rechazar</button>
+          <button class="btn-action whatsapp" onclick="enviarWhatsApp('${cita.telefono}')"> WhatsApp</button>
+          <button class="btn-action email" onclick="enviarEmail('${cita.email}')">Email</button>
+          <button class="btn-action info" onclick="abrirModalMascota(${cita.mascota_id})">ℹ Info</button>
+        ` : `
+          <div style="width: 100px; height: 30px; border-radius: 8px; background: ${colorEstado}; display: flex; align-items: center; justify-content: center;">
+            <span style="color: white; font-weight: 700; font-size: 12px; text-transform: uppercase;">
+              ${cita.estado}
+            </span>
+          </div>
+          <button class="btn-action info" onclick="abrirModalMascota(${cita.mascota_id})">ℹ Info</button>
+          <button class="btn-action eliminar" onclick="eliminarCita(${cita.id})"> Eliminar</button>
+        `;
+        
+        div.innerHTML = `
+          <div style="display:flex; gap:20px; align-items:start;">
+            <div style="flex-shrink:0;">
+              <img src="${cita.foto_principal || 'img/placeholder.jpg'}" 
+                   style="width:60px; height:60px; border-radius:15px; object-fit:cover;" alt="Mascota">
+            </div>
+            <div style="flex:1;">
+              <h3 style="color:#333; margin-bottom:5px;">${cita.mascota_nombre} </h3>
+              <p style="color:#666; font-size:14px; margin-bottom:10px;">${cita.nombre_cliente}</p>
+              <div style="background: #f0f4ff; padding: 12px; border-radius: 10px; border-left: 4px solid #1e3a5f;">
+                <p style="color:#1e3a5f; font-size:16px; font-weight: 700; margin:5px 0;">
+                   ${new Date(cita.fecha_cita).toLocaleDateString('es-CO', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
+                </p>
+                <p style="color:#1e3a5f; font-size:16px; font-weight: 700; margin:5px 0;">
+                   ${cita.hora_cita}
+                </p>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-direction:column;">
+              ${botones}
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // ============================================
+    // ACEPTAR CITA
+    // ============================================
+    async function aceptarCita(citaId) {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/cita/${citaId}/aceptar`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al aceptar cita');
+
+        console.log('✓ Cita aceptada ID:', citaId);
+        cargarEstadisticas();
+        cargarCitas();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al aceptar cita');
+      }
+    }
+
+    // ============================================
+    // RECHAZAR CITA
+    // ============================================
+    async function rechazarCita(citaId) {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/cita/${citaId}/rechazar`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al rechazar cita');
+
+        console.log('✗ Cita rechazada ID:', citaId);
+        cargarEstadisticas();
+        cargarCitas();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al rechazar cita');
+      }
+    }
+
+    // ============================================
+    // ELIMINAR CITA
+    // ============================================
+    async function eliminarCita(citaId) {
+      if (!confirm('¿Estás seguro de que quieres eliminar esta cita?')) {
+        return;
+      }
+
+      try {
+        const token = obtenerToken();
+        console.log('Token obtenido, longitud:', token?.length || 0);
+        console.log(' URL:', `${API_URL}/dashboard/cita/${citaId}`);
+        
+        const response = await fetch(`${API_URL}/dashboard/cita/${citaId}`, {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log(' Status respuesta:', response.status);
+        
+        let data;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+          console.log(' Respuesta JSON:', data);
+        } else {
+          const text = await response.text();
+          console.log(' Respuesta texto:', text);
+          data = { error: text };
+        }
+
+        if (!response.ok) {
+          throw new Error(data.error || data.detalles || `Error ${response.status}: ${response.statusText}`);
+        }
+
+        console.log('✅ Cita eliminada correctamente, ID:', citaId);
+        cargarEstadisticas();
+        cargarCitas();
+      } catch (error) {
+        console.error('❌ Error detectado:', error.message, error);
+        alert('❌ Error: ' + error.message);
+      }
+    }
+
+    // ============================================
+    // ENVIAR WHATSAPP
+    // ============================================
+    function enviarWhatsApp(telefono) {
+      if (!telefono) {
+        alert('No hay número de teléfono disponible');
+        return;
+      }
+      // Limpiar el número (solo dígitos)
+      const numeroLimpio = telefono.replace(/[^0-9]/g, '');
+      // Abrir WhatsApp
+      const url = `https://wa.me/${numeroLimpio}`;
+      window.open(url, '_blank');
+    }
+
+    // ============================================
+    // ENVIAR EMAIL
+    // ============================================
+    function enviarEmail(email) {
+      if (!email) {
+        alert('No hay email disponible');
+        return;
+      }
+      // Abrir cliente de email
+      const asunto = encodeURIComponent('Confirmación de tu cita veterinaria');
+      const cuerpo = encodeURIComponent('Hola,\n\nQuería confirmar tu cita con nosotros.\n\nSaludos,\nVitalPet');
+      const url = `mailto:${email}?subject=${asunto}&body=${cuerpo}`;
+      window.location.href = url;
+    }
+
+    // ============================================
+    // ABRIR MODAL CON INFO DE MASCOTA
+    // ============================================
+    async function abrirModalMascota(mascotaId) {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/mascota/${mascotaId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar mascota');
+
+        const data = await response.json();
+        const mascota = data.data;
+
+        const content = document.getElementById('historialContent');
+        content.innerHTML = `
+          <div style="display:flex; gap:20px;">
+            <img src="${mascota.foto_principal || 'img/placeholder.jpg'}" 
+                 style="width:120px; height:120px; border-radius:20px; object-fit:cover;" 
+                 alt="${mascota.nombre}">
+            <div style="flex:1;">
+              <h3 style="color:#333; margin-bottom:10px;">🐾 ${mascota.nombre}</h3>
+              <p style="color:#666;"><strong>Raza:</strong> ${mascota.raza}</p>
+              <p style="color:#666;"><strong>Especie:</strong> ${mascota.especie}</p>
+              <p style="color:#666;"><strong>Sexo:</strong> ${mascota.sexo}</p>
+              <p style="color:#666;"><strong>Color:</strong> ${mascota.color}</p>
+              <p style="color:#666;"><strong>Edad:</strong> ${mascota.edad} años</p>
+              <p style="color:#666;"><strong>Peso:</strong> ${mascota.peso} kg</p>
+              
+              <hr style="margin:15px 0; border:none; border-top:1px solid #ddd;">
+              
+              <h4 style="color:#333; margin-bottom:8px;">Información del Dueño</h4>
+              <p style="color:#666;"><strong>Nombre:</strong> ${mascota.dueño_nombre}</p>
+              <p style="color:#666;"><strong>Email:</strong> ${mascota.dueño_email}</p>
+              <p style="color:#666;"><strong>Teléfono:</strong> ${mascota.dueño_telefono}</p>
+              <p style="color:#666;"><strong>Dirección:</strong> ${mascota.dueño_direccion}</p>
+              
+              <hr style="margin:15px 0; border:none; border-top:1px solid #ddd;">
+              
+              <h4 style="color:#333; margin-bottom:8px;">Información Médica</h4>
+              <p style="color:#666;"><strong>Alergias:</strong> ${mascota.alergias || 'Ninguna registrada'}</p>
+              <p style="color:#666;"><strong>Enfermedades:</strong> ${mascota.enfermedades || 'Ninguna registrada'}</p>
+              <p style="color:#666;"><strong>Última visita vet:</strong> ${mascota.ultima_visita_vet || 'No registrada'}</p>
+            </div>
+          </div>
+          ${mascota.galeria && mascota.galeria.length > 0 ? `
+            <div style="margin-top:20px;">
+              <h4 style="color:#333; margin-bottom:10px;">Galería de Fotos</h4>
+              <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">
+                ${mascota.galeria.map(foto => `
+                  <img src="${foto.ruta_imagen}" style="width:100%; height:100px; border-radius:10px; object-fit:cover;">
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        `;
+
+        openHistorialModal();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cargar información de mascota');
+      }
+    }
+
+    // ============================================
+    // CARGAR COMPRAS / PEDIDOS
+    // ============================================
+    async function cargarCompras() {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/pedidos`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar pedidos');
+
+        const data = await response.json();
+        const pedidos = data.data;
+
+        const container = document.getElementById('lista-compras');
+        container.innerHTML = '';
+
+        if (pedidos.length === 0) {
+          container.innerHTML = '<p style="color:#999; padding:20px;">No hay pedidos registrados</p>';
+          return;
+        }
+
+        // Crear tabla de pedidos
+        let html = `
+          <table style="width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            <thead>
+              <tr style="background:#333; color:white;">
+                <th style="padding:15px; text-align:left;">ID</th>
+                <th style="padding:15px; text-align:left;">Cliente</th>
+                <th style="padding:15px; text-align:left;">Email</th>
+                <th style="padding:15px; text-align:left;">Dirección</th>
+                <th style="padding:15px; text-align:right;">Total</th>
+                <th style="padding:15px; text-align:center;">Estado</th>
+                <th style="padding:15px; text-align:center;">Método de Pago</th>
+                <th style="padding:15px; text-align:center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        pedidos.forEach(pedido => {
+          const estadoColor = {
+            'pendiente': '#ff9800',
+            'confirmado': '#4caf50',
+            'en_transito': '#2196f3',
+            'entregado': '#4caf50',
+            'cancelado': '#f44336'
+          }[pedido.estado] || '#999';
+
+          const direccion = `${pedido.direccion_calle} ${pedido.direccion_numero}${pedido.direccion_apartamento ? ' Apt ' + pedido.direccion_apartamento : ''}`;
+
+          html += `
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:15px;">#${pedido.id}</td>
+              <td style="padding:15px;">${pedido.nombre_cliente || 'N/A'}</td>
+              <td style="padding:15px;">${pedido.email}</td>
+              <td style="padding:15px; font-size:12px;">${direccion}, ${pedido.direccion_ciudad}</td>
+              <td style="padding:15px; text-align:right; font-weight:600;">$${parseFloat(pedido.total).toLocaleString()}</td>
+              <td style="padding:15px; text-align:center;">
+                <span style="background:${estadoColor}; color:white; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600;">
+                  ${pedido.estado}
+                </span>
+              </td>
+              <td style="padding:15px; text-align:center; font-size:12px;">${pedido.metodo_pago}</td>
+              <td style="padding:15px; text-align:center;">
+                <button onclick="abrirDetallePedido(${pedido.id})" style="background:#2196f3; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600;">
+                  Ver Detalles
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        html += `
+            </tbody>
+          </table>
+        `;
+
+        container.innerHTML = html;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // ============================================
+    // ABRIR DETALLE DE PEDIDO (MODAL)
+    // ============================================
+    async function abrirDetallePedido(pedidoId) {
+      try {
+        const token = obtenerToken();
+        const response = await fetch(`${API_URL}/dashboard/pedido/${pedidoId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar pedido');
+
+        const data = await response.json();
+        const pedido = data.data;
+
+        const content = document.getElementById('historialContent');
+        const direccion = `${pedido.direccion_calle} ${pedido.direccion_numero}${pedido.direccion_apartamento ? ' Apt ' + pedido.direccion_apartamento : ''}, ${pedido.direccion_ciudad}, ${pedido.direccion_departamento} ${pedido.direccion_codigo_postal}`;
+
+        content.innerHTML = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+            <div>
+              <h4 style="color:#333; margin-bottom:10px;"> Información del Pedido</h4>
+              <p style="color:#666;"><strong>ID Pedido:</strong> #${pedido.id}</p>
+              <p style="color:#666;"><strong>Estado:</strong> <span style="background:#2196f3; color:white; padding:3px 8px; border-radius:5px; font-size:12px;">${pedido.estado}</span></p>
+              <p style="color:#666;"><strong>Método de Pago:</strong> ${pedido.metodo_pago}</p>
+              <p style="color:#666;"><strong>Fecha:</strong> ${new Date(pedido.fecha_creacion).toLocaleDateString()}</p>
+            </div>
+            <div>
+              <h4 style="color:#333; margin-bottom:10px;">Datos del Cliente</h4>
+              <p style="color:#666;"><strong>Nombre:</strong> ${pedido.nombre_cliente || 'N/A'}</p>
+              <p style="color:#666;"><strong>Email:</strong> ${pedido.email}</p>
+              <p style="color:#666;"><strong>Teléfono:</strong> ${pedido.telefono}</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h4 style="color:#333; margin-bottom:10px;">Dirección de Entrega</h4>
+            <p style="color:#666;">${direccion}</p>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h4 style="color:#333; margin-bottom:10px;">Productos Comprados</h4>
+            <table style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr style="background:#f5f5f5;">
+                  <th style="padding:10px; text-align:left; font-size:12px; font-weight:600;">Producto</th>
+                  <th style="padding:10px; text-align:center; font-size:12px; font-weight:600;">Cantidad</th>
+                  <th style="padding:10px; text-align:right; font-size:12px; font-weight:600;">Precio Unit.</th>
+                  <th style="padding:10px; text-align:right; font-size:12px; font-weight:600;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${pedido.detalles.map(det => `
+                  <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px; font-size:12px;">${det.producto_nombre || 'Producto Eliminado'}</td>
+                    <td style="padding:10px; text-align:center; font-size:12px;">${det.cantidad}</td>
+                    <td style="padding:10px; text-align:right; font-size:12px;">$${parseFloat(det.precio_unitario).toLocaleString()}</td>
+                    <td style="padding:10px; text-align:right; font-size:12px; font-weight:600;">$${parseFloat(det.subtotal).toLocaleString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 200px; gap:20px; border-top:2px solid #ddd; padding-top:20px;">
+            <div></div>
+            <div>
+              <p style="color:#666; margin-bottom:8px;"><strong>Subtotal:</strong> <span style="float:right;">$${parseFloat(pedido.subtotal).toLocaleString()}</span></p>
+              <p style="color:#666; margin-bottom:8px;"><strong>Envío:</strong> <span style="float:right;">$${parseFloat(pedido.envio).toLocaleString()}</span></p>
+              <p style="color:#333; font-size:16px; font-weight:700; margin-top:10px; border-top:1px solid #ddd; padding-top:10px;"><strong>Total:</strong> <span style="float:right; color:#2196f3;">$${parseFloat(pedido.total).toLocaleString()}</span></p>
+            </div>
+          </div>
+        `;
+
+        openHistorialModal();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cargar detalles del pedido');
+      }
+    }
+
+    // ============================================
+    // MODAL MANAGEMENT
+    // ============================================
+    const historialModal = document.getElementById("historialModal");
+    const closeHistorial = document.getElementById("closeHistorial");
+
+    function openHistorialModal() {
+      historialModal.classList.add("active");
+      historialModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeHistorialModal() {
+      historialModal.classList.remove("active");
+      historialModal.setAttribute("aria-hidden", "true");
+    }
+
+    closeHistorial.addEventListener("click", closeHistorialModal);
+    historialModal.addEventListener("click", (e) => {
+      if (e.target === historialModal) closeHistorialModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && historialModal.classList.contains("active")) {
+        closeHistorialModal();
+      }
+    });
+
+    // ============================================
+    // NAVEGACIÓN ENTRE SECCIONES
+    // ============================================
+    let bloqueoCambiosPestana = false; // Variable para bloquear cambios automáticos
+    
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = btn.getAttribute('data-target');
+        const btnText = btn.textContent.trim();
+        
+        // SI ESTÁ BLOQUEADO, CANCELAR TODO
+        if (bloqueoCambiosPestana) {
+          console.log('%cCLICK BLOQUEADO EN "' + btnText + '" (target: ' + target + ')', 'color: white; background: red; font-weight: bold; padding: 5px; font-size: 12px;');
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          return false;
+        }
+
+        console.log('%c✅ Click permitido - Cambiando a pestaña: ' + target, 'color: green; font-weight: bold;');
+        
+        // Remover clase active de todos los botones
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        
+        // Agregar clase active al botón clickeado
+        btn.classList.add('active');
+        
+        // Ocultar todas las secciones
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Mostrar la sección seleccionada
+        const selectedSection = document.getElementById(target);
+        if (selectedSection) {
+          selectedSection.classList.add('active');
+        }
+      });
+    });
+
+    // ============================================
+    // LOGOUT
+    // ============================================
+    document.getElementById('logoutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('vitalpet_admin_token');
+      window.location.href = 'login.html';
+    });
+
+    // ============================================
+    // CARGAR TODO AL INICIAR
+    // ============================================
+    
+    // 🔒 INTERCEPTOR GLOBAL DE CLICKS CUANDO ESTÁ BLOQUEADO
+    document.addEventListener('click', (e) => {
+      const navBtn = e.target.closest('.nav-btn');
+      if (navBtn && bloqueoCambiosPestana) {
+        const btnText = navBtn.textContent.trim();
+        const target = navBtn.getAttribute('data-target');
+        console.log('%c🛑 INTERCEPTOR GLOBAL CAPTURÓ CLICK EN "' + btnText + '" (target: ' + target + ')', 'color: white; background: #ff5722; font-weight: bold; padding: 5px; font-size: 12px;');
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+    }, true); // Usar CAPTURE phase para interceptar antes que otros listeners
+
+    window.addEventListener('DOMContentLoaded', () => {
+      cargarEstadisticas();
+      cargarCitas();
+      cargarCompras();
+    });
+
+    // ============================================
+    // FUNCIONES PARA MOSTRAR MENSAJES
+    // ============================================
+    function mostrarMensajeExito({ producto, onClose }) {
+      console.log('%c✅ PRODUCTO AGREGADO EXITOSAMENTE', 'color: white; background: #4caf50; font-weight: bold; padding: 5px;');
+      
+      const mensajeDiv = document.getElementById('mensajeProducto');
+      
+      // Mostrar mensaje de éxito
+      mensajeDiv.innerHTML = `
+        <div style="background: #4caf50; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+          <div style="font-size: 20px; margin-bottom: 10px;">✓ ¡Producto Agregado Exitosamente!</div>
+          <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; text-align: left;">
+            <p><strong> Nombre:</strong> ${producto.nombre}</p>
+            <p><strong> Precio:</strong> $${Number(producto.precio).toLocaleString('es-CO')}</p>
+            <p><strong> Stock:</strong> ${producto.stock} unidades</p>
+            <p><strong> Para:</strong> ${producto.para_animal}</p>
+          </div>
+        </div>
+      `;
+      
+      mensajeDiv.style.display = 'block';
+      
+      // Desbloquear navegación después de 3 segundos
+      setTimeout(() => {
+        console.log('%c Desbloqueo automático después de mostrar éxito', 'color: green; font-weight: bold;');
+        bloqueoCambiosPestana = false;
+        
+        // Ocultar mensaje después de 5 segundos
+        setTimeout(() => {
+          mensajeDiv.style.display = 'none';
+          mensajeDiv.innerHTML = '';
+        }, 5000);
+        
+        // Ejecutar callback si existe
+        if (onClose && typeof onClose === 'function') {
+          onClose();
+        }
+      }, 3000);
+    }
+
+    function mostrarMensajeError({ error, detalles }) {
+      console.log('%c❌ ERROR AL AGREGAR PRODUCTO', 'color: white; background: #f44336; font-weight: bold; padding: 5px;');
+      
+      const mensajeDiv = document.getElementById('mensajeProducto');
+      
+      // Mostrar mensaje de error
+      mensajeDiv.innerHTML = `
+        <div style="background: #f44336; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+          <div style="font-size: 16px; margin-bottom: 10px;">❌ Error: ${error}</div>
+          ${detalles ? `<small style="display: block; margin-top: 5px; opacity: 0.9;">${detalles}</small>` : ''}
+        </div>
+      `;
+      
+      mensajeDiv.style.display = 'block';
+      
+      // Desbloquear navegación
+      bloqueoCambiosPestana = false;
+      
+      // Ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+        mensajeDiv.innerHTML = '';
+      }, 5000);
+    }
+
+    // ============================================
+    // FORMULARIO AGREGAR PRODUCTOS
+    // ============================================
+    // Preview de imagen
+    document.getElementById('prod-imagen')?.addEventListener('change', (e) => {
+      const archivo = e.target.files[0];
+      if (archivo) {
+        // Validar tamaño (máximo 5MB)
+        if (archivo.size > 5 * 1024 * 1024) {
+          alert('❌ La imagen debe tener un tamaño máximo de 5MB');
+          e.target.value = '';
+          document.getElementById('previewImagen').style.display = 'none';
+          return;
+        }
+        
+        // Validar tipo de archivo
+        if (!archivo.type.startsWith('image/')) {
+          alert('❌ Solo se aceptan archivos de imagen');
+          e.target.value = '';
+          document.getElementById('previewImagen').style.display = 'none';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          document.getElementById('imgPreview').src = event.target.result;
+          document.getElementById('previewImagen').style.display = 'block';
+        };
+        reader.readAsDataURL(archivo);
+      }
+    });
+
+    // Enviar formulario
+    document.getElementById('formProducto')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const nombre = document.getElementById('prod-nombre').value.trim();
+      const descripcion = document.getElementById('prod-descripcion').value.trim();
+      const precio = parseFloat(document.getElementById('prod-precio').value);
+      const stock = parseInt(document.getElementById('prod-stock').value);
+      const categoria = document.getElementById('prod-categoria').value;
+      const paraAnimal = document.getElementById('prod-animal').value;
+      const imagen = document.getElementById('prod-imagen').files[0];
+      
+      // Validaciones
+      if (!nombre || nombre.length < 3) {
+        alert('❌ El nombre debe tener al menos 3 caracteres');
+        return;
+      }
+      
+      if (!descripcion || descripcion.length < 10) {
+        alert('❌ La descripción debe tener al menos 10 caracteres');
+        return;
+      }
+      
+      if (!precio || precio <= 0) {
+        alert('❌ El precio debe ser mayor a 0');
+        return;
+      }
+      
+      if (!stock || stock < 0) {
+        alert('❌ El stock debe ser 0 o mayor');
+        return;
+      }
+      
+      if (!categoria) {
+        alert('❌ Debes seleccionar una categoría');
+        return;
+      }
+      
+      if (!paraAnimal) {
+        alert('❌ Debes seleccionar para qué animal es el producto');
+        return;
+      }
+      
+      if (!imagen) {
+        alert('❌ Debes cargar una imagen');
+        return;
+      }
+
+      try {
+        const token = obtenerToken();
+        if (!token) {
+          alert('❌ No tienes permiso. Por favor inicia sesión como admin');
+          return;
+        }
+
+        // Mostrar Loading
+        const btnEnviar = document.querySelector('#formProducto button[type="submit"]');
+        const textOriginal = btnEnviar.textContent;
+        btnEnviar.disabled = true;
+        btnEnviar.textContent = ' Guardando...';
+
+        const formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('descripcion', descripcion);
+        formData.append('precio', precio);
+        formData.append('stock', stock);
+        formData.append('categoria_id', categoria);
+        formData.append('para_animal', paraAnimal);
+        formData.append('imagen', imagen);
+
+        console.log(' Enviando producto:', { nombre, precio, stock, categoria, paraAnimal });
+
+        // ✅ Usar API_URL dinámica (se define al inicio del script)
+        const response = await fetch(`${API_URL}/productos/admin/crear`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+        
+        console.log(' Respuesta completa del servidor:', {
+          status: response.status,
+          ok: response.ok,
+          data: data
+        });
+        
+        if (response.ok) {
+          console.log('✅ Producto agregado correctamente:', data.producto);
+          
+          // ✅ MOSTRAR MENSAJE DE ÉXITO
+          console.log('✅ Producto agregado - Mostrando mensaje de éxito');
+          
+          mostrarMensajeExito({
+            producto: data.producto,
+            onClose: () => {
+              // Limpiar DESPUÉS de que se hide el mensaje
+              console.log('🧹 Limpiando formulario');
+              document.getElementById('formProducto').reset();
+              document.getElementById('previewImagen').style.display = 'none';
+              btnEnviar.disabled = false;
+              btnEnviar.textContent = textOriginal;
+            }
+          });
+          
+          // 🔔 Notificar a otras pestañas
+          const eventoProducto = {
+            timestamp: Date.now(),
+            evento: 'nuevo_producto',
+            producto: data.producto,
+            id: data.producto?.id
+          };
+          
+          // 📢 Disparar evento personalizado (más eficiente)
+          console.log('🎉 Producto agregado exitosamente:', data.producto.nombre);
+          window.dispatchEvent(new CustomEvent('productoAgregado', { detail: eventoProducto }));
+        } else {
+          console.error('❌ Error del servidor:', data);
+          
+          // Mostrar mensaje de error
+          mostrarMensajeError({
+            error: data.error || 'Error desconocido',
+            detalles: data.detalles
+          });
+          
+          btnEnviar.disabled = false;
+          btnEnviar.textContent = textOriginal;
+        }
+      } catch (error) {
+        console.error('🔴 ERROR DE CONEXIÓN:', error);
+        
+        mostrarMensajeError({
+          error: error.message,
+          detalles: 'No se pudo conectar al servidor'
+        });
+        
+        const btnEnviar = document.querySelector('#formProducto button[type="submit"]');
+        btnEnviar.disabled = false;
+        btnEnviar.textContent = textOriginal;
+      }
+    });
+
+    // =============================================
+    // FUNCIONES PARA ELIMINAR PRODUCTOS
+    // =============================================
+    async function cargarProductosParaEliminar() {
+      try {
+        const listaDiv = document.getElementById('listaProductos');
+        listaDiv.innerHTML = '<p style="color:#999; grid-column:1/-1; text-align:center;"> Cargando...</p>';
+
+        // ✅ Usar configuración dinámica
+        const baseUrl = window.VITALPET?.API_BASE || 'http://localhost:5000/api';
+        const response = await fetch(`${baseUrl}/productos`);
+        const data = await response.json();
+        const productos = data.productos || [];
+
+        if (productos.length === 0) {
+          listaDiv.innerHTML = '<p style="color:#999; grid-column:1/-1; text-align:center;">No hay productos</p>';
+          return;
+        }
+
+        listaDiv.innerHTML = productos.map(prod => `
+          <div style="background:#f5f5f5; padding:15px; border-radius:10px; border-left:4px solid #ff9800;">
+            <p style="margin:0 0 5px 0; font-weight:600; color:#333;">${prod.nombre}</p>
+            <p style="margin:0 0 5px 0; font-size:12px; color:#666;">Precio: $${Number(prod.precio).toLocaleString('es-CO')}</p>
+            <p style="margin:0 0 10px 0; font-size:12px; color:#666;">Stock: ${prod.stock}</p>
+            <button onclick="eliminarProductoById(${prod.id})" style="background:#f44336; color:white; padding:8px 12px; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:12px; width:100%;">
+               Desactivar
+            </button>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('listaProductos').innerHTML = '<p style="color:red; grid-column:1/-1;">Error al cargar productos</p>';
+      }
+    }
+
+    async function eliminarProductoById(productoId) {
+      if (!confirm('¿Estás seguro de que deseas desactivar este producto? No aparecerá en la tienda pero se mantiene el histórico.')) return;
+
+      try {
+        const token = localStorage.getItem('vitalpet_admin_token');
+        // ✅ Usar configuración dinámica
+        const baseUrl = window.VITALPET?.API_BASE || 'http://localhost:5000/api';
+
+        const response = await fetch(`${baseUrl}/productos/admin/${productoId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('✅ Producto desactivado (no aparecerá en tienda)');
+          cargarProductosParaEliminar(); // Recargar lista
+        } else {
+          const errorMsg = data.error || data.detalles || 'Error desconocido';
+          console.error('Error:', data);
+          alert(`❌ Error: ${errorMsg}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error de conexión');
+      }
+    }
+
+    async function eliminarTodosLosProductos() {
+      if (!confirm(' ¿Desactivar TODOS los productos? No aparecerán en la tienda pero se mantiene el histórico.')) return;
+
+      try {
+        const token = localStorage.getItem('vitalpet_admin_token');
+        // ✅ Usar configuración dinámica
+        const baseUrl = window.VITALPET?.API_BASE || 'http://localhost:5000/api';
+
+        const response = await fetch(`${baseUrl}/productos`);
+        const data = await response.json();
+        const productos = data.productos || [];
+
+        for (const prod of productos) {
+          await fetch(`${baseUrl}/productos/admin/${prod.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        }
+
+        alert(`✅ Se desactivaron ${productos.length} productos`);
+        cargarProductosParaEliminar();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al desactivar');
+      }
+    }
+
+    // Agregar event listeners
+    document.getElementById('btnCargarProductos')?.addEventListener('click', cargarProductosParaEliminar);
+    document.getElementById('btnLimpiarTodo')?.addEventListener('click', eliminarTodosLosProductos);
+  </script>
+
+  <!-- Estilos para botones de acción -->
+  <style>
+    .btn-action {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-action.aceptar {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-action.aceptar:hover {
+      background: #45a049;
+    }
+
+    .btn-action.rechazar {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-action.rechazar:hover {
+      background: #da190b;
+    }
+
+    .btn-action.info {
+      background: #5cd4d8;
+      color: white;
+    }
+
+    .btn-action.info:hover {
+      background: #0b7dda;
+    }
+
+    .btn-action.whatsapp {
+      background: #5cd4d8;
+      color: white;
+    }
+
+    .btn-action.whatsapp:hover {
+      background: #5cd4d8;
+    }
+
+    .btn-action.email {
+      background: #ff6b35;
+      color: white;
+    }
+
+    .btn-action.email:hover {
+      background: #c2221f;
+    }
+
+    .btn-action.eliminar {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-action.eliminar:hover {
+      background: #e68900;
+    }
+
+    .appointment-card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-left: 4px solid #2196f3;
+    }
+  </style>
+
+</body>
+</html>

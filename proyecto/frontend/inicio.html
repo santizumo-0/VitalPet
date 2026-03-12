@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalPet - Inicio</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<style>
+
+    /* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+/* Utilidades */
+.hidden {
+  display: none !important;
+}
+
+/* Navegación superior */
+.nav-container {
+  background-color: white;
+  border-radius: 30px;
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  z-index: 999;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-icon {
+  width: 120px;
+  height: 120px;
+  background-color: transparent;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+/* Botón CTA */
+.cta-button {
+  background-color: #ff6b35;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-button:hover {
+  background-color: #e55a28;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+  border-radius: 15px;
+  margin: 20px auto;
+  max-width: 1100px;
+  overflow: hidden;
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  padding: 60px;
+  flex: 1;
+  z-index: 2;
+}
+
+.hero-title {
+  color: white;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 15px;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 500px;
+}
+
+.hero-image {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+/* Separador */
+.separator {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d0d0d0, transparent);
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* Servicios */
+.services-section {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  outline: none;
+}
+
+.service-item:hover {
+  transform: translateY(-5px);
+}
+
+.service-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #b3e5fc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  transition: background-color 0.3s;
+}
+
+.service-item:hover .service-icon {
+  background-color: #81d4fa;
+}
+
+.service-name {
+  color: #333;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.clinic-photo {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  margin: 0 auto;
+  display: block;
+}
+
+/* Sección de Bienvenida */
+.welcome-section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.welcome-title {
+  color: #4fc3f7;
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.welcome-text {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 15px;
+  text-align: justify;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcome-cta {
+  margin-top: 30px;
+}
+
+/* Sección de Urgencias */
+.emergency-section {
+  background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);
+  border-radius: 15px;
+  margin: 40px auto;
+  max-width: 1100px;
+  overflow: hidden;
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.emergency-content {
+  padding: 50px 60px;
+  text-align: right;
+  z-index: 2;
+}
+
+.emergency-title {
+  color: white;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.emergency-image {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+}
+
+/* Sección Por qué elegirnos */
+.why-section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.why-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.why-image-container {
+  text-align: center;
+}
+
+.why-image {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.why-cta {
+  margin-top: 25px;
+}
+
+.why-content {
+  padding: 20px;
+}
+
+.why-title {
+  color: #4fc3f7;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 25px;
+}
+
+.why-text {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+/* Footer */
+.footer {
+  background-color: white;
+  padding: 50px 20px;
+  margin-top: 60px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  text-align: center;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 50px;
+  font-size: 13px;
+}
+
+.footer-column h4 {
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.footer-column p,
+.footer-column a {
+  color: #666;
+  text-decoration: none;
+  line-height: 2;
+  display: block;
+}
+
+.footer-column a:hover {
+  color: #4fc3f7;
+}
+
+/* Badge 24 horas */
+.badge-24 {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 110px;
+  height: 110px;
+  background-color: #00a8e8;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 5px solid white;
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.badge-24:hover {
+  transform: scale(1.05);
+}
+
+.badge-24 .emergencia {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.badge-24 .horas {
+  font-size: 32px;
+}
+
+/* User Profile Icon and Dropdown */
+.user-profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-profile-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #4fc3f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: 2px solid #29b6f6;
+}
+
+.user-profile-icon:hover {
+  background-color: #29b6f6;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  display: none;
+  z-index: 1000;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.profile-dropdown.active {
+  display: block;
+}
+
+.profile-dropdown-item {
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.profile-dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-container {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content {
+    padding: 40px 30px;
+  }
+
+  .hero-image {
+    opacity: 0.3;
+    width: 100%;
+  }
+
+  .emergency-image {
+    opacity: 0.3;
+    width: 100%;
+  }
+
+  .emergency-content {
+    text-align: center;
+  }
+
+  .nav-container {
+    max-width: 95%;
+    padding: 10px 20px;
+  }
+
+  .nav-links {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+
+</style>
+
+<body>
+  <!-- Header / Navegación -->
+  <header>
+    <nav class="nav-container" aria-label="Navegación principal">
+      <div class="logo-section">
+        <a href="inicio.html" class="logo-icon" aria-label="Ir al inicio">
+          <img src="img/logo.jpeg" alt="Logo VitalPet" />
+        </a>
+      </div>
+
+      <div class="nav-links">
+        <a href="inicio.html" class="nav-link">Inicio</a>
+        <a href="servicios.html" class="nav-link">Servicios</a>
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+
+        <a id="nav-login" href="login.html" class="nav-link hidden">Iniciar sesión</a>
+
+        <!-- Perfil (se mostrará cuando el usuario esté logueado con JS) -->
+        <div id="user-profile" class="user-profile-container hidden">
+          <button
+            id="profile-btn"
+            class="user-profile-icon"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Abrir menú de perfil"
+          >
+            👤
+          </button>
+
+          <div id="profile-dropdown" class="profile-dropdown" role="menu">
+            <a href="informacion.html" class="profile-dropdown-item" role="menuitem">
+              👤 Mi perfil
+            </a>
+
+            <button id="logout-btn" class="profile-dropdown-item" type="button" role="menuitem">
+              🚪 Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenido principal -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <img
+        src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=600&fit=crop"
+        alt="Perro"
+        class="hero-image"
+      />
+
+      <div class="hero-content">
+        <h1 class="hero-title">¿Le pasó algo a tu mascota?<br />Estamos aquí para ayudarla</h1>
+
+        <p class="hero-subtitle">
+          Las urgencias no se reservan. ¡Es desde ya! Estamos listos para asesorarte, contenerte y cuidar de tu
+          compañero.
+        </p>
+
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+      </div>
+    </section>
+
+    <!-- Separador -->
+    <div class="separator" aria-hidden="true"></div>
+
+    <!-- Servicios -->
+    <section class="services-section" id="servicios">
+      <div class="services-grid">
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">🔬</div>
+          <h3 class="service-name">Ayudas diagnósticas</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">🏥</div>
+          <h3 class="service-name">Hospitalización</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">🚨</div>
+          <h3 class="service-name">Urgencias 24 horas</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">⚕️</div>
+          <h3 class="service-name">Cirugía veterinaria</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">💉</div>
+          <h3 class="service-name">Medicina preventiva</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">👨‍⚕️</div>
+          <h3 class="service-name">Consulta veterinaria</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">✈️</div>
+          <h3 class="service-name">Trámite de viaje</h3>
+        </article>
+
+        <article class="service-item" tabindex="0">
+          <div class="service-icon" aria-hidden="true">🧪</div>
+          <h3 class="service-name">Laboratorio clínico</h3>
+        </article>
+      </div>
+
+      <img
+        src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=800&h=500&fit=crop"
+        alt="Clínica VitalPet"
+        class="clinic-photo"
+      />
+    </section>
+
+    <!-- Sección de Bienvenida -->
+    <section class="welcome-section">
+      <h2 class="welcome-title">¡Bienvenidos a VitalPet, clínica veterinaria 24 horas en El Carmen de Viboral!</h2>
+
+      <p class="welcome-text">
+        Entendemos que las emergencias no tienen horario. Nuestra clínica veterinaria está disponible 24 horas en El
+        Carmen de Viboral, los 7 días de la semana. Queremos asegurarte que, en los momentos de necesidad, siempre
+        puedes contar con nosotros para cuidar de tu mascota.
+      </p>
+
+      <p class="welcome-text">
+        Contamos con un equipo de auxiliares y profesionales altamente capacitados. Cada uno tiene una profunda pasión
+        por los animales y se esfuerza por brindar la atención de la más alta calidad. Además, contamos con experiencia
+        en múltiples especialidades: cirugía veterinaria, medicina preventiva, laboratorio clínico y más.
+      </p>
+
+      <div class="welcome-cta">
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+      </div>
+    </section>
+
+    <!-- Sección de Urgencias -->
+    <section class="emergency-section">
+      <img
+        src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=600&fit=crop"
+        alt="Perro con vendaje"
+        class="emergency-image"
+      />
+
+      <div class="emergency-content">
+        <h2 class="emergency-title">Urgencias 24 horas en Medellín</h2>
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+      </div>
+    </section>
+
+    <!-- Sección Por qué elegirnos -->
+    <section class="why-section">
+      <div class="why-container">
+        <div class="why-image-container">
+          <img
+            src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop"
+            alt="Veterinaria con gato"
+            class="why-image"
+          />
+
+          <div class="why-cta">
+            <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+          </div>
+        </div>
+
+        <div class="why-content">
+          <h2 class="why-title">¿Por qué elegir nuestra clínica veterinaria?</h2>
+
+          <p class="why-text">
+            En momentos de emergencia, es esencial contar con un equipo de profesionales dedicados y apasionados por los
+            animales. Nuestro equipo incluye veterinarios experimentados, asesoría especializada y recursos modernos.
+          </p>
+
+          <p class="why-text">
+            Además, ofrecemos servicios integrales: medicina preventiva, atención de emergencias, cirugía veterinaria,
+            hospitalización, laboratorio clínico y asistencia en trámites de viaje.
+          </p>
+
+          <p class="why-text">
+            La salud de tu mascota es nuestra prioridad. Las tratamos como si fueran parte de nuestra familia. Si tu
+            mascota está pasando por dolor o se siente mal, no debe esperar. Nuestro equipo está listo para brindar el
+            cuidado y el respeto que se merece.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <h3 class="footer-title">Nuestras redes</h3>
+
+      <div class="footer-grid">
+        <section class="footer-column">
+          <div class="footer-logo">
+            <div class="logo-icon">
+              <img src="img/logo.jpeg" alt="Logo VitalPet" />
+            </div>
+          </div>
+
+          <h4>Atención 24 horas</h4>
+          <p>📞 Línea de atención: 604 322 3781</p>
+          <p>📱 (+57) 323 369 9228</p>
+          <p>✉️ servicioalcliente@itpetvet.com.co</p>
+        </section>
+
+        <section class="footer-column">
+          <h4>Servicios</h4>
+          <p>Ayudas diagnósticas</p>
+          <p>Hospitalización</p>
+          <p>Urgencias 24 horas</p>
+          <p>Cirugía</p>
+          <p>Medicina preventiva</p>
+          <p>Consulta</p>
+          <p>Trámite de viaje</p>
+          <p>Laboratorio clínico</p>
+          <p>Domicilios veterinarios en Medellín</p>
+        </section>
+
+        <section class="footer-column">
+          <h4>Información</h4>
+          <p>Nosotros</p>
+          <p>Contáctanos</p>
+          <p>Preguntas frecuentes</p>
+          <p>Blog / Noticias</p>
+          <p>Términos y condiciones</p>
+        </section>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Badge 24 horas -->
+  <button class="badge-24" type="button" aria-label="Urgencias 24 horas">
+    <span class="emergencia">URGENCIAS</span>
+    <span class="horas">24</span>
+    <span class="emergencia">HORAS</span>
+  </button>
+
+  <!-- JS para manejar autenticación y perfil -->
+  <script src="js/storage.js"></script>
+  <script>
+    // ✅ Gestionar visibilidad de login vs perfil
+    function initializeNavigation() {
+      const token = Storage.getToken();
+      const navLogin = document.getElementById("nav-login");
+      const userProfileContainer = document.getElementById("user-profile");
+
+      if (token) {
+        // Usuario logueado: ocultar "Iniciar sesión", mostrar perfil
+        if (navLogin) navLogin.classList.add("hidden");
+        if (userProfileContainer) userProfileContainer.classList.remove("hidden");
+      } else {
+        // Usuario no logueado: mostrar "Iniciar sesión", ocultar perfil
+        if (navLogin) navLogin.classList.remove("hidden");
+        if (userProfileContainer) userProfileContainer.classList.add("hidden");
+      }
+    }
+
+    // ✅ Manejar dropdown del perfil
+    const profileBtn = document.getElementById("profile-btn");
+    const dropdown = document.getElementById("profile-dropdown");
+
+    if (profileBtn && dropdown) {
+      profileBtn.addEventListener("click", () => {
+        dropdown.classList.toggle("active");
+        const expanded = profileBtn.getAttribute("aria-expanded") === "true";
+        profileBtn.setAttribute("aria-expanded", String(!expanded));
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("#user-profile")) {
+          dropdown.classList.remove("active");
+          profileBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    // ✅ Manejar logout
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        Storage.clearAuth();
+        localStorage.removeItem("vitalpet_usuario");
+        window.location.href = "login.html";
+      });
+    }
+
+    // Inicializar navegación cuando carga la página
+    initializeNavigation();
+  </script>
+</body>
+</html>

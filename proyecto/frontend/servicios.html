@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalPet - Servicios Veterinarios</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      
+    }
+
+    /* Sección con logo y navegación */
+    
+
+    .nav-container {
+      background-color: white;
+      border-radius: 30px;
+      padding: 10px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 700px;
+      margin: 20px auto;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 999;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      
+    }
+
+    .logo-icon {
+      width: 120px;
+      height: 120px;
+      background-color: transparent;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .id1 {
+      text-decoration: none;
+      color: #333;
+      font-size: 19px;
+      font-weight: 500;
+      
+    }
+
+    .cta-button {
+      background-color: #ff6b35;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Contenido principal */
+    .main-content {
+      background-color: #ffffff;
+      padding: 40px 20px;
+    }
+
+    .services-title {
+      text-align: center;
+      color: #1e3a5f;
+      font-size: 40px;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+
+    /* Grid de servicios */
+    .services-grid {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .service-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+
+      
+    }
+
+    .service-card {
+      
+      border: none;
+      border-radius: 8px;
+      padding: 30px 20px;
+      text-align: center;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .service-card:hover {
+      background-color: #f8f8f8;
+      transform: translateY(-2px);
+      
+    }
+
+    .service-icon {
+      font-size: 60px;
+      color: #1e3a5f;
+      margin-bottom: 15px;
+      height: 160px;
+      width: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      
+    }
+
+    .img-produ {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+
+    .service-name {
+      color: #2c2c2c;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Segunda fila de servicios */
+    .services-grid-bottom {
+      max-width: 700px;
+      margin: 0 auto 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      
+    }
+
+    .service-card-small {
+      border: none;
+      border-radius: 8px;
+      padding: 25px 15px;
+      text-align: center;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .service-card-small:hover {
+      background-color: #f8f8f8;
+      transform: translateY(-2px);
+    }
+
+    .service-icon-small {
+      font-size: 50px;
+      color: #1e3a5f;
+      margin-bottom: 12px;
+      height: 150px;
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .service-icon-small img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Sección del equipo */
+    .team-section {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .team-photo {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .team-content {
+      flex: 1;
+    }
+
+    .team-title {
+      color: #1e3a5f;
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .team-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #f5f5f5;
+      padding: 40px 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .footer-content {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .footer-title {
+      text-align: center;
+      color: #2c2c2c;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .footer-column h4 {
+      color: #2c2c2c;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .footer-column p,
+    .footer-column a {
+      color: #666;
+      text-decoration: none;
+      line-height: 1.8;
+      display: block;
+    }
+
+    /* Badge 24 horas */
+    .badge-24 {
+      position: fixed;
+      bottom: 100px;
+      left: 20px;
+      width: 110px;
+      height: 110px;
+      background-color: #00a8e8;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 4px solid white;
+    }
+
+    .badge-24 .emergencia {
+      font-size: 14px;
+    }
+
+    .badge-24 .horas {
+      font-size: 28px;
+    }
+
+    /* User Profile */
+    .user-profile-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile-container.hidden { display: none !important; }
+
+    .hidden { display: none !important; }
+
+    .user-profile-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #4fc3f7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      border: 2px solid #29b6f6;
+    }
+
+    .user-profile-icon:hover {
+      background-color: #29b6f6;
+    }
+
+    .profile-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .profile-dropdown.active {
+      display: block;
+    }
+
+    .profile-dropdown-item {
+      padding: 12px 20px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .profile-dropdown-item:hover {
+      background-color: #f5f5f5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid-bottom {
+        grid-template-columns: 1fr;
+      }
+
+      .team-section {
+        flex-direction: column;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 15px;
+      }
+
+      .nav-container {
+        padding: 15px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav-section">
+    <nav class="nav-container" aria-label="Navegación principal">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="img/logo.jpeg" alt="Logo de VitalPet" />
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="inicio.html" class="id1">Inicio</a>
+        <a href="servicios.html" class="id1">Servicios</a>
+        <a href="calendario.html" class="id1 cta-button">Agenda tu cita</a>
+        <a id="nav-login" href="login.html" class="id1 hidden">Iniciar sesión</a>
+
+        <div id="user-profile" class="user-profile-container hidden">
+          <button id="profile-btn" class="user-profile-icon" type="button" aria-label="Abrir menú de perfil">👤</button>
+          <div id="profile-dropdown" class="profile-dropdown" role="menu">
+            <a href="informacion.html" class="profile-dropdown-item" role="menuitem">
+              👤 Mi perfil
+            </a>
+            <button id="logout-btn" class="profile-dropdown-item" type="button" role="menuitem">
+              🚪 Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <h1 class="services-title">Servicios de VitalPet</h1>
+
+    <!-- Servicios principales -->
+    <section class="services-grid" aria-label="Servicios principales">
+      <a href="calendario.html" class="service-link">
+        <div class="service-card">
+          <div class="service-icon">
+            <img class="img-produ" src="https://purina.com.co/sites/default/files/2022-10/purina-esterilizaci%C3%B3n-de-mascotas.jpg" alt="Citas médicas" />
+          </div>
+          <div class="service-name">Citas médicas</div>
+        </div>
+      </a>
+
+      <a href="calendario.html" class="service-link">
+        <div class="service-card">
+          <div class="service-icon">
+            <img class="img-produ" src="https://www.donbigotes.co/wp-content/uploads/bano.png" alt="Peluquería y baño" />
+          </div>
+          <div class="service-name">Peluquería y baño</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- Productos -->
+    <section class="services-grid-bottom" aria-label="Productos">
+      <a href="productos.html" class="service-link">
+        <div class="service-card-small">
+          <div class="service-icon-small">
+            <img src="https://es.mypet.com/wp-content/uploads/sites/23/2021/03/accesorios-mascotas-destacada-1.jpg" alt="Accesorios" />
+          </div>
+          <div class="service-name">Accesorios</div>
+        </div>
+      </a>
+
+      <a href="productos.html" class="service-link">
+        <div class="service-card-small">
+          <div class="service-icon-small">
+            <img src="https://www.smurfitkappa.com/co/-/m/images/spotlight-teaser-image-1250-x-914/pet-food-jpg.jpg?rev=-1" alt="Comida" />
+          </div>
+          <div class="service-name">Comida</div>
+        </div>
+      </a>
+
+      <a href="productos.html" class="service-link">
+        <div class="service-card-small">
+          <div class="service-icon-small">
+            <img src="https://www.clinicaraza.com/web/image/34797/C%C3%B3mo%20le%20doy%20medicamentos%20orales%20a%20mi%20mascota%20-%20URGENCIAS%20VETERINARIAS%2024%20HORAS%20-%20Cl%C3%ADnica%20Raza" alt="Medicamentos" />
+          </div>
+          <div class="service-name">Medicamentos</div>
+        </div>
+      </a>
+    </section>
+
+    <!-- Equipo -->
+    <section class="team-section" aria-label="Equipo">
+      <div class="team-image">
+        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop" alt="Veterinario con mascotas" class="team-photo" />
+      </div>
+
+      <div class="team-content">
+        <h2 class="team-title">Nuestro equipo de profesionales en VitalPet</h2>
+        <p class="team-description">
+          Creemos en la importancia de contar con un equipo altamente calificado y amante de los animales. Nuestros auxiliares y veterinarios en Medellín tienen una profunda pasión por el cuidado de las mascotas.
+        </p>
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <h3 class="footer-title">Nuestras redes</h3>
+
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo-icon">
+              <img src="img/logo.jpeg" alt="Logo VitalPet" />
+            </div>
+          </div>
+
+          <br />
+
+          <h4>ATENCIÓN 24 HORAS</h4>
+          <p>📞 Línea de atención: 604 312 1919</p>
+          <p>📱 Celular: 315 686 0060</p>
+          <p>✉️ info@vitalpet.com.co</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>SERVICIOS</h4>
+          <a href="#">Auxiliar fisioterapéutico</a>
+          <a href="#">Peluquería</a>
+          <a href="#">Urgencias 24 horas</a>
+          <a href="#">Consulta</a>
+          <a href="#">Cirugía</a>
+          <a href="#">Exámenes de laboratorio</a>
+          <a href="#">Hospitalización</a>
+          <a href="#">Guardería / hospedaje</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>INFORMACIÓN</h4>
+          <a href="#">Nosotros</a>
+          <a href="#">Blog</a>
+          <a href="#">Preguntas frecuentes</a>
+          <a href="#">Trabaja con nosotros</a>
+          <a href="#">Términos y condiciones</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="badge-24" aria-label="Emergencias 24 horas">
+    <div class="emergencia">EMERGENCIA</div>
+    <div class="horas">24</div>
+    <div class="emergencia">HORAS</div>
+  </div>
+
+  <!-- JS para autenticación -->
+  <script src="js/storage.js"></script>
+  <script>
+    // ✅ Esperar a que el DOM esté listo y Storage cargado
+    function initializeNavigation() {
+      const token = Storage.getToken();
+      console.log("🔍 Token en servicios:", token ? "Existe" : "No existe");
+      
+      const navLogin = document.getElementById("nav-login");
+      const userProfileContainer = document.getElementById("user-profile");
+
+      if (token) {
+        if (navLogin) navLogin.classList.add("hidden");
+        if (userProfileContainer) userProfileContainer.classList.remove("hidden");
+        console.log("✅ Usuario logueado - mostrando perfil");
+      } else {
+        if (navLogin) navLogin.classList.remove("hidden");
+        if (userProfileContainer) userProfileContainer.classList.add("hidden");
+        console.log("❌ Usuario no logueado - mostrando login");
+      }
+    }
+
+    // ✅ Manejar dropdown del perfil
+    function initializeDropdown() {
+      const profileBtn = document.getElementById("profile-btn");
+      const dropdown = document.getElementById("profile-dropdown");
+
+      if (profileBtn && dropdown) {
+        profileBtn.addEventListener("click", () => {
+          dropdown.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest("#user-profile")) {
+            dropdown.classList.remove("active");
+          }
+        });
+      }
+
+      // ✅ Manejar logout
+      const logoutBtn = document.getElementById("logout-btn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          Storage.clearAuth();
+          localStorage.removeItem("vitalpet_usuario");
+          window.location.href = "login.html";
+        });
+      }
+    }
+
+    // Ejecutar cuando el DOM esté listo
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeNavigation();
+        initializeDropdown();
+      });
+    } else {
+      initializeNavigation();
+      initializeDropdown();
+    }
+  </script>
+</body>
+</html>

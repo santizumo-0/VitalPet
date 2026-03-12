@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalPet - Tienda de Productos</title>
+    
+    <style>
+  /* =========================
+     RESET + BASE
+  ========================= */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(to bottom, #a8d5d8 0%, #7ec5c9 100%);
+    min-height: 100vh;
+  }
+
+  /* =========================
+     NAVBAR
+  ========================= */
+  .nav-container {
+    background-color: white;
+    border-radius: 30px;
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 700px;
+    margin: 20px auto;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 20px;
+    z-index: 999;
+  }
+
+  .logo-section {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-icon {
+    width: 120px;
+    height: 120px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+  }
+
+  /* Link navbar */
+  .id1 {
+    text-decoration: none;
+    color: #333;
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  .cta-button {
+    background-color: #ff6b35;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* =========================
+     CATEGORIES
+  ========================= */
+  .categories-section {
+    background-color: rgba(94, 154, 159, 0.6);
+    padding: 25px 20px;
+    margin-bottom: 30px;
+  }
+
+  .categories-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-bottom: 20px;
+  }
+
+  .category-tab h2 {
+    color: white;
+    font-size: 28px;
+    font-weight: 400;
+    cursor: pointer;
+    padding-bottom: 10px;
+  }
+
+  .category-tab.active h2 {
+    border-bottom: 3px solid white;
+  }
+
+  /* Link titulo Perros / Gatos */
+  .id2 {
+    text-decoration: none;
+    color: #1e3a5f;
+    font-size: 40px;
+    font-weight: 500;
+  }
+
+  .subcategories {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 15px;
+  }
+
+  .subcategory-link {
+    color: #1e3a5f;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .subcategory-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Botón categoría activa */
+  .active-category-btn {
+    background-color: #5e9a9f;
+    color: white;
+    padding: 12px 40px;
+    border-radius: 30px;
+    font-size: 22px;
+    font-weight: 400;
+    border: none;
+    margin: 25px auto;
+    display: block;
+    cursor: pointer;
+  }
+
+  /* =========================
+     SEPARADOR + TITULO
+  ========================= */
+  .separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+    max-width: 200px;
+    margin: 70px auto;
+  }
+
+  .section-title {
+    text-align: center;
+    color: white;
+    font-size: 35px;
+    font-weight: 300;
+    margin: 30px 0;
+    text-transform: lowercase;
+  }
+
+  /* =========================
+     PRODUCTS GRID
+  ========================= */
+  .products-container {
+    display: grid;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+   
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 12px 30px;
+    
+
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  .product-card {
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 15px;
+  }
+
+  .product-name {
+    color: #1e3a5f;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-price {
+    color: #1e3a5f;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* =========================
+     FOOTER
+  ========================= */
+  .footer {
+    background-color: #f5f5f5;
+    padding: 40px 20px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .footer-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .footer-title {
+    text-align: center;
+    color: #2c2c2c;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .footer-column h4 {
+    color: #2c2c2c;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .footer-column p,
+  .footer-column a {
+    color: #666;
+    text-decoration: none;
+    line-height: 1.8;
+    display: block;
+  }
+
+  .footer-logo {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .footer-logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  /* =========================
+     PRODUCT MODAL
+  ========================= */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+  .modal-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 0 auto 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .modal-title {
+    color: #1e3a5f;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+
+  .modal-price {
+    color: #1e3a5f;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .modal-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .modal-btn-buy {
+    background-color: #1e3a5f;
+    color: white;
+  }
+
+  .modal-btn-buy:hover {
+    background-color: #1e3a5f;
+  }
+
+  .modal-btn-cart {
+    background-color: #5e9a9f;
+    color: white;
+  }
+
+  .modal-btn-cart:hover {
+    background-color: #4a7a80;
+  }
+
+  .modal-btn-close {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+
+  .modal-btn-close:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* =========================
+     PAYMENT MODAL
+  ========================= */
+  .payment-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .payment-modal.active {
+    display: flex;
+  }
+
+  .payment-modal-content {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .payment-modal-title {
+    color: #2d7b5f;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .payment-form-group {
+    margin-bottom: 20px;
+  }
+
+  .payment-form-group label {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .payment-form-group input,
+  .payment-form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  .payment-form-group input:focus,
+  .payment-form-group select:focus {
+    outline: none;
+    border-color: #2d7b5f;
+    box-shadow: 0 0 0 3px rgba(45, 123, 95, 0.1);
+  }
+
+  .payment-methods {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .payment-method-btn {
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .payment-method-btn:hover {
+    border-color: #2d7b5f;
+    background-color: #f0faf8;
+  }
+
+  .payment-method-btn.active {
+    border-color: #2d7b5f;
+    background-color: #2d7b5f;
+    color: white;
+  }
+
+  .payment-summary {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-left: 4px solid #2d7b5f;
+  }
+
+  .payment-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .payment-summary-row:last-child {
+    margin-bottom: 0;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    font-weight: 700;
+    color: #2d7b5f;
+  }
+
+  .payment-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  .payment-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .payment-btn-primary {
+    background-color: #2d7b5f;
+    color: white;
+  }
+
+  .payment-btn-primary:hover {
+    background-color: #1f5741;
+    transform: translateY(-2px);
+  }
+
+  .payment-btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+
+  .payment-btn-secondary:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* =========================
+     CART SIDEBAR
+  ========================= */
+  .cart-sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 900;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .cart-sidebar.active {
+    right: 0;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .sidebar-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .sidebar-close {
+    background-color: transparent;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .sidebar-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    align-items: flex-start;
+  }
+
+  .sidebar-item-image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-item-info {
+    flex: 1;
+  }
+
+  .sidebar-item-name {
+    font-size: 13px;
+    color: #1e3a5f;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 5px;
+  }
+
+  .sidebar-item-price {
+    font-size: 15px;
+    color: #1e3a5f;
+    font-weight: 700;
+  }
+
+  .sidebar-item-remove {
+    background-color: transparent;
+    border: none;
+    color: #ff6b35;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    align-self: flex-start;
+  }
+
+  .sidebar-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+  }
+
+  .sidebar-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding-top: 15px;
+    border-top: 2px solid #e0e0e0;
+  }
+
+  .sidebar-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a5f;
+  }
+
+  .sidebar-checkout {
+    width: 100%;
+    padding: 12px;
+    background-color: #1e3a5f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .sidebar-checkout:hover {
+    background-color: #1e3a5f;
+  }
+
+  /* =========================
+     CART ICON
+  ========================= */
+  .cart-icon-wrapper {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .cart-icon {
+    font-size: 24px;
+    color: #333;
+    transition: transform 0.3s;
+  }
+
+  .cart-icon-wrapper:hover .cart-icon {
+    transform: scale(1.1);
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid white;
+  }
+
+  /* =========================
+     USER PROFILE
+  ========================= */
+  .user-profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .user-profile-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #4fc3f7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 2px solid #29b6f6;
+  }
+
+  .user-profile-icon:hover {
+    background-color: #29b6f6;
+  }
+
+  .profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    margin-top: 10px;
+  }
+
+  .profile-dropdown.active {
+    display: block;
+  }
+
+  .profile-dropdown-item {
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .profile-dropdown-item:hover {
+    background-color: #f5f5f5;
+  }
+
+  .profile-dropdown-item:first-child {
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Animación de recarga */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* =========================
+     RESPONSIVE
+  ========================= */
+  @media (max-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+  }
+
+  /* =========================
+     ANIMAL SECTIONS
+  ========================= */
+  .animal-section {
+    position: relative;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    margin-bottom: 20px;
+    border-top: 3px solid rgba(255,255,255,0.3);
+  }
+
+  .animal-section:first-of-type {
+    border-top: none;
+  }
+
+  .animal-section h1 {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+  }
+
+  .section-title {
+    text-align: center;
+    color: #1e3a5f;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 50px 0 20px;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+  }
+
+  .separator {
+    height: 3px;
+    background: linear-gradient(1deg, transparent, #1e3a5f, transparent);
+    max-width: 1200px;
+    margin: 20px auto 40px;
+  }
+
+  @media (max-width: 768px) {
+    .categories-tabs {
+      gap: 50px;
+    }
+
+    .subcategories {
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+
+    .nav-container {
+      padding: 15px 20px;
+    }
+
+    .nav-links {
+      gap: 15px;
+    }
+
+    .animal-section h1 {
+      font-size: 1.8em;
+    }
+
+    .section-title {
+      font-size: 20px;
+    }
+
+    .animal-section {
+      padding: 40px 15px;
+    }
+
+    .product-image {
+      height: 150px;
+    }
+
+    .category-tab h2 {
+      font-size: 24px;
+    }
+
+    .id2 {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .categories-tabs {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .animal-section h1 {
+      font-size: 1.4em;
+    }
+
+    .section-title {
+      font-size: 18px;
+    }
+
+    .product-card {
+      padding: 15px;
+      border-radius: 15px;
+    }
+
+    .product-image {
+      height: 120px;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <!-- Cargar configuración dinámica PRIMERO (antes de scripts inline) -->
+  <script src="js/config.js"></script>
+
+    <!-- Navegación -->
+    <div class="nav-container">
+        <div class="logo-section">
+            <div class="logo-icon"><img src="img/logo.jpeg" alt="VitalPet Logo"></div>
+        </div>
+
+        <div class="nav-links">
+            <a href="inicio.html" class="id1">inicio</a>
+            <a href="servicios.html" class="id1">servicios</a>
+            <a href="calendario.html" class="id1 cta-button">Agenda Tu Cita</a>
+            <a id="nav-login" href="login.html" class="id1">iniciar sesión</a>
+
+            <div id="user-profile" class="user-profile-container" style="display: none;">
+                <div class="user-profile-icon">👤</div>
+                <div class="profile-dropdown">
+                    <a href="informacion.html" class="profile-dropdown-item">
+                        <span>👤 Mi Perfil</span>
+                    </a>
+                    <button id="logout-btn" class="profile-dropdown-item">
+                        <span>🚪 Cerrar sesión</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="cart-icon-wrapper" id="openCartBtn">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Producto -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" src="" alt="Producto">
+            <p class="modal-title" id="modalTitle"></p>
+            <p class="modal-price" id="modalPrice"></p>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-buy" id="modalBuyBtn">Comprar</button>
+                <button class="modal-btn modal-btn-cart" id="modalAddCartBtn">Agregar al carrito</button>
+                <button class="modal-btn modal-btn-close" id="modalCloseBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Carrito -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Tu Carrito</h2>
+            <button class="sidebar-close" id="closeCartBtn">×</button>
+        </div>
+
+        <div class="sidebar-items" id="sidebarItems"></div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-total">
+                <span>Total:</span>
+                <span id="sidebarTotal">$0</span>
+            </div>
+            <button class="sidebar-checkout" id="checkoutBtn">Procesar Compra</button>
+
+        </div>
+    </div>
+
+    <!-- ===== SECCIÓN DE CATEGORÍAS ==== -->
+    <div class="categories-section">
+        <div class="categories-tabs">
+            <div class="category-tab">
+                <h2><a class="id2" href="#perros-section"> Perros</a></h2>
+            </div>
+            <div class="category-tab">
+                <h2><a class="id2" href="#gatos-section"> Gatos</a></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PERROS ==== -->
+    <div id="perros-section" class="animal-section">
+        <h1 style="text-align: center; color: #1e3a5f; margin: 40px 0 30px; font-size: 2.5em;"> Productos para Perros</h1>
+
+        <!-- Comida para Perros -->
+        <h2 id="comipe" class="section-title"> Comida</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+
+        <!-- Accesorios para Perros -->
+        <h2 id="accepe" class="section-title">Accesorios</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+
+        <!-- Medicamentos para Perros -->
+        <h2 id="medipe" class="section-title"> Medicamentos</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+    </div>
+
+    <!-- ===== GATOS ==== -->
+    <div id="gatos-section" class="animal-section">
+        <h1 style="text-align: center; color: #1e3a5f; margin: 40px 0 30px; font-size: 2.5em;"> Productos para Gatos</h1>
+
+        <!-- Comida para Gatos -->
+        <h2 id="comiga" class="section-title">Comida</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+
+        <!-- Accesorios para Gatos -->
+        <h2 id="accega" class="section-title">Accesorios</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+
+        <!-- Medicamentos para Gatos -->
+        <h2 id="mediga" class="section-title"> Medicamentos</h2>
+        <div class="separator"></div>
+        <div class="products-container">
+            <div class="products-grid"></div>
+        </div>
+    </div>
+
+    <!-- TODO lo demás queda igual hasta el footer y payment modal -->
+    <!-- (Aquí NO te pego todo otra vez porque es larguísimo) -->
+
+    <!-- Modal de Pago -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-modal-content">
+            <h1 class="payment-modal-title">Completar Compra</h1>
+
+            <div class="payment-summary" id="paymentSummary"></div>
+
+            <div class="payment-form-group">
+                <label for="direccionEnvio">Dirección de Envío *</label>
+                <input type="text" id="direccionEnvio" placeholder="Calle, número, apartamento, ciudad">
+            </div>
+
+            <div class="payment-form-group">
+                <label>Método de Pago *</label>
+
+                <div class="payment-methods">
+                    <button class="payment-method-btn active" data-method="tarjeta">💳 Tarjeta De Crédito</button>
+                    <button class="payment-method-btn" data-method="pse">🏦 PSE</button>
+                    <button class="payment-method-btn" data-method="nequi">📱 Nequi</button>
+                    <button class="payment-method-btn" data-method="efectivo">💵 Contra Entrega</button>
+                </div>
+            </div>
+
+            <div class="payment-buttons">
+                <button class="payment-btn payment-btn-secondary" id="cancelPaymentBtn">Cancelar</button>
+                <button class="payment-btn payment-btn-primary" id="confirmPaymentBtn">Confirmar Pago</button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+    <h3 class="footer-title">Nuestras redes</h3>
+
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo-icon">
+              <img src="img/logo.jpeg" alt="Logo VitalPet" />
+            </div>
+          </div>
+
+          <br />
+
+          <h4>ATENCIÓN 24 HORAS</h4>
+          <p>📞 Línea de atención: 604 312 1919</p>
+          <p>📱 Celular: 315 686 0060</p>
+          <p>✉️ info@vitalpet.com.co</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>SERVICIOS</h4>
+          <a href="#">Auxiliar fisioterapéutico</a>
+          <a href="#">Peluquería</a>
+          <a href="#">Urgencias 24 horas</a>
+          <a href="#">Consulta</a>
+          <a href="#">Cirugía</a>
+          <a href="#">Exámenes de laboratorio</a>
+          <a href="#">Hospitalización</a>
+          <a href="#">Guardería / hospedaje</a>
+        </div>
+
+        <div class="footer-column">
+          <h4>INFORMACIÓN</h4>
+          <a href="#">Nosotros</a>
+          <a href="#">Blog</a>
+          <a href="#">Preguntas frecuentes</a>
+          <a href="#">Trabaja con nosotros</a>
+          <a href="#">Términos y condiciones</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+<script>
+// ==========================
+// VITALPET TIENDA - JS MINIMO
+// Modal + Carrito + Sidebar + Checkout
+// ==========================
+
+// Helpers
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => document.querySelectorAll(selector);
+
+// ==========================
+// ELEMENTOS PRINCIPALES
+// ==========================
+const modal = $("#modal");
+const modalImage = $("#modalImage");
+const modalTitle = $("#modalTitle");
+const modalPrice = $("#modalPrice");
+
+const modalBuyBtn = $("#modalBuyBtn");
+const modalAddCartBtn = $("#modalAddCartBtn");
+const modalCloseBtn = $("#modalCloseBtn");
+
+const cartSidebar = $("#cartSidebar");
+const openCartBtn = $("#openCartBtn");
+const closeCartBtn = $("#closeCartBtn");
+const sidebarItems = $("#sidebarItems");
+const sidebarTotal = $("#sidebarTotal");
+const cartBadge = $("#cartBadge");
+const checkoutBtn = $("#checkoutBtn");
+
+const navLogin = $("#nav-login");
+const userProfile = $("#user-profile");
+const logoutBtn = $("#logout-btn");
+
+// ==========================
+// ESTADO GLOBAL
+// ==========================
+let selectedProduct = null;
+
+// Carrito: [{ id, name, price, image, qty }]
+let cart = [];
+
+// ==========================
+// FUNCIONES DE PRECIO
+// ==========================
+function parsePrice(priceText) {
+  const clean = priceText
+    .replace(/\$/g, "")
+    .replace(/\./g, "")
+    .replace(/,/g, "")
+    .trim();
+
+  const num = Number(clean);
+  return isNaN(num) ? 0 : num;
+}
+
+function formatPrice(num) {
+  return "$" + Number(num).toLocaleString("es-CO");
+}
+
+// ==========================
+// MODAL
+// ==========================
+function openModal(product) {
+  selectedProduct = product;
+
+  modalImage.src = product.image;
+  modalTitle.textContent = product.name;
+  modalPrice.textContent = formatPrice(product.price);
+
+  modal.classList.add("active");
+}
+
+function closeModal() {
+  modal.classList.remove("active");
+  selectedProduct = null;
+}
+
+// ==========================
+// CARRITO
+// ==========================
+function addToCart(product) {
+  const found = cart.find((p) => p.id === product.id);
+
+  if (found) {
+    found.qty += 1;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+
+  updateCartUI();
+  // ✅ Guardar cambios en localStorage
+  localStorage.setItem("vitalpet_cart", JSON.stringify(cart));
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter((p) => p.id !== productId);
+  updateCartUI();
+  // ✅ Guardar cambios en localStorage
+  localStorage.setItem("vitalpet_cart", JSON.stringify(cart));
+}
+
+function getCartTotal() {
+  return cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+}
+
+function updateCartUI() {
+  sidebarItems.innerHTML = "";
+
+  if (cart.length === 0) {
+    sidebarItems.innerHTML = `<div class="sidebar-empty">Tu carrito está vacío 🐾</div>`;
+    sidebarTotal.textContent = formatPrice(0);
+    cartBadge.style.display = "none";
+    return;
+  }
+
+  cart.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "sidebar-item";
+
+    div.innerHTML = `
+      <img class="sidebar-item-image" src="${item.image}" alt="${item.name}" onerror="this.style.backgroundColor='#f0f0f0';">
+      <div class="sidebar-item-info">
+        <p class="sidebar-item-name">${item.name}</p>
+        <p class="sidebar-item-price">${formatPrice(item.price)} x ${item.qty}</p>
+      </div>
+      <button class="sidebar-item-remove" title="Eliminar">✖</button>
+    `;
+
+    div.querySelector(".sidebar-item-remove").addEventListener("click", () => {
+      removeFromCart(item.id);
+    });
+
+    sidebarItems.appendChild(div);
+  });
+
+  sidebarTotal.textContent = formatPrice(getCartTotal());
+
+  const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+  cartBadge.textContent = totalItems;
+  cartBadge.style.display = "flex";
+}
+
+// ==========================
+// SIDEBAR
+// ==========================
+function loadCartFromLocalStorage() {
+  // Cargar el carrito desde localStorage (guardado por productos.js)
+  const savedCart = localStorage.getItem("vitalpet_cart");
+  if (savedCart) {
+    try {
+      cart = JSON.parse(savedCart);
+    } catch (e) {
+      console.error("Error al cargar carrito:", e);
+      cart = [];
+    }
+  }
+  updateCartUI();
+}
+
+function openCart() {
+  // Cargar productos desde localStorage antes de mostrar el sidebar
+  loadCartFromLocalStorage();
+  cartSidebar.classList.add("active");
+}
+
+function closeCart() {
+  cartSidebar.classList.remove("active");
+}
+
+// ==========================
+// VERIFICAR AUTENTICACIÓN (Token Real)
+// ==========================
+function checkAuthentication() {
+  // Revisar si hay token JWT real en localStorage (usuario logueado)
+  const token = localStorage.getItem("vitalpet_token");
+
+  if (token) {
+    // Usuario logueado: mostrar perfil, ocultar "iniciar sesión"
+    navLogin.style.display = "none";
+    userProfile.style.display = "flex";
+  } else {
+    // Usuario no logueado: mostrar "iniciar sesión", ocultar perfil
+    navLogin.style.display = "inline-block";
+    userProfile.style.display = "none";
+  }
+}
+
+function logout() {
+  // Limpiar token y usuario del localStorage
+  localStorage.removeItem("vitalpet_token");
+  localStorage.removeItem("vitalpet_usuario");
+  checkAuthentication();
+  alert("Sesión cerrada.");
+}
+
+
+// ==========================
+// DROPDOWN PERFIL
+// ==========================
+function initProfileDropdown() {
+  const icon = userProfile?.querySelector(".user-profile-icon");
+  const dropdown = userProfile?.querySelector(".profile-dropdown");
+
+  if (!icon || !dropdown) return;
+
+  icon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("active");
+  });
+
+  document.addEventListener("click", () => {
+    dropdown.classList.remove("active");
+  });
+}
+
+// ==========================
+// CARGAR PRODUCTOS DESDE API
+// ==========================
+async function cargarProductosDesdeAPI() {
+  try {
+    console.log('🔄 Cargando productos desde API...');
+    
+    // ✅ Obtener URL del backend de manera dinámica (centralizada en config.js)
+    const backendUrl = window.VITALPET?.API_BASE || 'http://localhost:5000/api';
+    
+    const response = await fetch(`${backendUrl}/productos`);
+    if (!response.ok) throw new Error('Error al obtener productos');
+    
+    const data = await response.json();
+    const productos = data.data || [];
+    
+    console.log('✓ Productos cargados:', productos.length);
+    
+    // Renderizar productos
+    renderProductos(productos);
+  } catch (error) {
+    console.error('❌ Error cargando productos:', error);
+    // Mostrar mensaje de error en la página
+    const grid = document.querySelector('.products-grid');
+    if (grid) {
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">Error al cargar productos. Por favor recarga la página.</p>';
+    }
+  }
+}
+
+// ==========================
+// RENDERIZAR PRODUCTOS
+// ==========================
+function renderProductos(productos) {
+  // Obtener todos los grids
+  const grids = document.querySelectorAll('.products-grid');
+  
+  // Limpiar todos los grids
+  grids.forEach(grid => {
+    grid.innerHTML = '';
+  });
+  
+  if (productos.length === 0) {
+    grids.forEach(grid => {
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No hay productos disponibles por el momento.</p>';
+    });
+    return;
+  }
+  
+  // Mapeo de grids por categoría
+  // Estructura: [Perros-Comida, Perros-Accesorios, Perros-Medicamentos, Gatos-Comida, Gatos-Accesorios, Gatos-Medicamentos]
+  const categoriasMap = {
+    'alimentos': [0, 3],      // Mostrar en Perros-Comida y Gatos-Comida
+    'accesorios': [1, 4],     // Mostrar en Perros-Accesorios y Gatos-Accesorios
+    'medicinas': [2, 5]       // Mostrar en Perros-Medicamentos y Gatos-Medicamentos
+  };
+  
+  // Procesar cada producto
+  productos.forEach(producto => {
+    const categoria = (producto.categoria || 'alimentos').toLowerCase();
+    const indicesGrids = categoriasMap[categoria] || [0, 3]; // Por defecto en comida
+    
+    // Crear tarjeta
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.cursor = 'pointer';
+    
+    const imagen = producto.imagen || 'https://via.placeholder.com/200?text=Sin+Imagen';
+    
+    card.innerHTML = `
+      <img src="${imagen}" alt="${producto.nombre}" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+      <p class="product-name">${producto.nombre}</p>
+      <p class="product-price">$${parseFloat(producto.precio).toLocaleString('es-CO')}</p>
+    `;
+    
+    // Agregar evento click
+    card.addEventListener('click', () => {
+      openModal({
+        id: producto.id,
+        name: producto.nombre,
+        price: parseFloat(producto.precio),
+        image: imagen,
+        description: producto.descripcion,
+        stock: producto.stock
+      });
+    });
+    
+    // Agregar a los grids correspondientes
+    indicesGrids.forEach(indice => {
+      if (grids[indice]) {
+        // Clonar la tarjeta para cada grid
+        const cardClone = card.cloneNode(true);
+        cardClone.addEventListener('click', () => {
+          openModal({
+            id: producto.id,
+            name: producto.nombre,
+            price: parseFloat(producto.precio),
+            image: imagen,
+            description: producto.descripcion,
+            stock: producto.stock
+          });
+        });
+        grids[indice].appendChild(cardClone);
+      }
+    });
+  });
+  
+  console.log('✓ Productos renderizados en todos los grids');
+}
+
+// ==========================
+// CAPTURAR PRODUCTOS DEL HTML (FALLBACK)
+// ==========================
+function initProducts() {
+  const cards = $$(".product-card");
+
+  cards.forEach((card, index) => {
+    const img = card.querySelector("img");
+    const nameEl = card.querySelector(".product-name");
+    const priceEl = card.querySelector(".product-price");
+
+    if (!img || !nameEl || !priceEl) return;
+
+    const product = {
+      id: index + 1,
+      name: nameEl.textContent.trim(),
+      price: parsePrice(priceEl.textContent),
+      image: img.getAttribute("src"),
+    };
+
+    card.addEventListener("click", () => {
+      openModal(product);
+    });
+  });
+}
+
+// ==========================
+// EVENTOS MODAL
+// ==========================
+modalCloseBtn.addEventListener("click", closeModal);
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
+
+modalAddCartBtn.addEventListener("click", () => {
+  if (!selectedProduct) return;
+  addToCart(selectedProduct);
+  alert("Producto agregado al carrito 🛒");
+});
+
+modalBuyBtn.addEventListener("click", () => {
+  if (!selectedProduct) return;
+  addToCart(selectedProduct);
+  openCart();
+  closeModal();
+});
+
+// ==========================
+// EVENTOS SIDEBAR
+// ==========================
+openCartBtn.addEventListener("click", openCart);
+closeCartBtn.addEventListener("click", closeCart);
+
+// ==========================
+// EVENTOS CHECKOUT
+// ==========================
+checkoutBtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Tu carrito está vacío.");
+    return;
+  }
+
+  // Guardar carrito en localStorage
+  localStorage.setItem("vitalpet_cart", JSON.stringify(cart));
+  
+  // Redirigir a checkout
+  console.log("✅ Ir a checkout con", cart.length, "productos");
+  window.location.href = "checkout.html";
+});
+
+// ==========================
+// INICIALIZACIÓN AL CARGAR
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🚀 Inicializando productos.html");
+  checkAuthentication();
+  initProfileDropdown();
+  logoutBtn.addEventListener("click", logout);
+});
+
+// ==========================
+// ESCUCHAR ACTUALIZACIONES DEL CARRITO
+// ==========================
+window.addEventListener('carritoActualizado', (evento) => {
+  console.log('🔄 Carrito actualizado:', evento.detail);
+  // Si el carrito está abierto, recargar automáticamente desde localStorage
+  if (cartSidebar.classList.contains('active')) {
+    loadCartFromLocalStorage();
+  }
+});
+
+</script>
+
+<!-- Scripts: Orden importante (API primero, luego Storage, luego validaciones, luego productos.js) -->
+<script src="js/api.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="productos.js"></script>
+
+</html>

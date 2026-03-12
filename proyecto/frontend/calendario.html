@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalPet - Reservas</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:#c8e9ea;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+   
+    .nav-container {
+  background-color: white;
+  border-radius: 30px;
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  z-index: 999;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+     
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .cta-button {
+      background-color: #ff6b35;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .cta-button:hover {
+      background-color: #e55a24;
+      transform: translateY(-1px);
+    }
+
+    /* SEPARADORES */
+    .separator {
+      height: 2px;
+      background-color: rgba(94, 154, 159, 0.3);
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    /* TITULO */
+    .main-title {
+      text-align: center;
+      color: #1e3a5f;
+      font-size: 36px;
+      font-weight: 400;
+      font-style: italic;
+      margin: 30px 0 10px;
+      padding: 0 16px;
+    }
+
+    .title-separator {
+      height: 2px;
+      background-color: rgba(94, 154, 159, 0.3);
+      max-width: 900px;
+      margin: 20px auto;
+    }
+
+    /* BOTONES SERVICIO */
+    .service-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 0 16px;
+      flex-wrap: wrap;
+    }
+
+    .service-btn {
+      background-color: #1e3a5f;
+      color: white;
+      padding: 14px 40px;
+      border-radius: 35px;
+      border: none;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .service-btn:hover {
+      background-color: #1e3a5f;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .service-btn.active { background-color: #1e3a5f; }
+
+    /* CALENDARIO */
+    main {
+      padding: 0 16px 60px;
+    }
+
+    .calendar-container {
+      max-width: 750px;
+      margin: 30px auto 0;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .calendar-icon { font-size: 32px; color: #1e3a5f; }
+
+    .calendar-title {
+      color: #1e3a5f;
+      font-size: 28px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .month-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .month-btn {
+      border: none;
+      background: #1e3a5f;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .month-btn:hover {
+      background-color: #16314a;
+      transform: translateY(-1px);
+    }
+
+    .month-label {
+      font-weight: 700;
+      color: #1e3a5f;
+      font-size: 18px;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .weekday {
+      background-color: #1e3a5f;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .calendar-day {
+      background-color: #f5f5f5;
+      border: 2px solid #e0e0e0;
+      border-radius: 50%;
+      width: 62px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin: 0 auto;
+      user-select: none;
+    }
+
+    .calendar-day:hover {
+      background-color: #e8f4f5;
+      border-color: #4a9ea3;
+      transform: scale(1.05);
+    }
+
+    .calendar-day.today {
+      background-color: #1e3a5f;
+      color: white;
+      border-color: #1e3a5f;
+    }
+
+    .calendar-day.empty {
+      background-color: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    .calendar-day.empty:hover { transform: none; }
+
+    .calendar-day.selected {
+      background-color: #ff6b35;
+      color: white;
+      border-color: #ff6b35;
+    }
+
+    /* MODALES */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-container {
+      max-width: 520px;
+      width: 100%;
+      background-color: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      animation: modalSlideIn 0.25s ease-in-out;
+      position: relative;
+    }
+
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: #1e3a5f;
+    }
+
+    .modal-icon { font-size: 32px; }
+    .modal-title { font-size: 26px; font-weight: 600; text-align: center; }
+
+    .selected-date {
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 18px;
+      padding: 12px;
+      background-color: #f0f8f9;
+      border-radius: 10px;
+    }
+
+    .schedules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    .schedule-slot {
+      background-color: #f5f5f5;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+      user-select: none;
+    }
+
+    .schedule-slot:hover {
+      background-color: #e8f4f5;
+      border-color: #4a9ea3;
+      transform: scale(1.04);
+    }
+
+    .schedule-slot.selected {
+      background-color: #ff6b35;
+      color: white;
+      border-color: #ff6b35;
+    }
+
+    .confirm-button {
+      background-color: #ff6b35;
+      color: white;
+      padding: 14px 30px;
+      border-radius: 25px;
+      border: none;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 18px;
+      transition: all 0.25s;
+      box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+    }
+
+    .confirm-button:hover {
+      background-color: #e55a24;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .confirm-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* FORM */
+    #clientDataForm {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-group label { font-weight: 700; color: #333; font-size: 14px; }
+
+    .form-control {
+      padding: 12px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.25s;
+      font-family: inherit;
+      background: white;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #1e3a5f;
+    }
+
+    .form-control:disabled {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+    }
+
+    /* PERFIL */
+    .user-profile-container { position: relative; display: flex; align-items: center; }
+
+    .user-profile-container.hidden { display: none !important; }
+
+    .hidden { display: none !important; }
+
+    .user-profile-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #4fc3f7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: 2px solid #29b6f6;
+    }
+
+    .user-profile-icon:hover { background-color: #29b6f6; }
+
+    .profile-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .profile-dropdown.active { display: block; }
+
+    .profile-dropdown-item {
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      color: #333;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .profile-dropdown-item:hover { background-color: #f5f5f5; }
+
+    .profile-dropdown-item + .profile-dropdown-item {
+      border-top: 1px solid #eee;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-container { padding: 10px 16px; border-radius: 22px; }
+      .logo-icon { width: 55px; height: 55px; }
+
+      .main-title { font-size: 28px; }
+
+      .calendar-container { padding: 18px; }
+
+      .calendar-day {
+        width: 46px;
+        height: 46px;
+        font-size: 14px;
+      }
+
+      .weekday { padding: 8px; font-size: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="nav-container" aria-label="Navegación principal">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="img/logo.jpeg" alt="Logo de VitalPet" />
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="inicio.html" class="nav-link">Inicio</a>
+        <a href="servicios.html" class="nav-link">Servicios</a>
+        <a href="calendario.html" class="cta-button">Agenda tu cita</a>
+
+        <a id="nav-login" href="login.html" class="nav-link hidden">Iniciar sesión</a>
+
+        <div id="user-profile" class="user-profile-container hidden">
+          <button id="profile-btn" class="user-profile-icon" aria-label="Abrir menú de usuario">👤</button>
+
+          <div id="profile-dropdown" class="profile-dropdown" role="menu">
+            <a href="informacion.html" class="profile-dropdown-item" role="menuitem">👤 Mi perfil</a>
+            <button id="logout-btn" class="profile-dropdown-item" role="menuitem">🚪 Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="separator"></div>
+
+  <h1 class="main-title">Reservas para Veterinaria y Estética Animal</h1>
+
+  <div class="title-separator"></div>
+
+  <section class="service-buttons" aria-label="Selecciona un servicio">
+    <button class="service-btn active" data-service="veterinaria">Veterinaria</button>
+    <button class="service-btn" data-service="estetica">Peluquería y baño</button>
+  </section>
+
+  <main>
+    <section class="calendar-container" aria-label="Calendario de reservas">
+      <div class="calendar-header">
+        <span class="calendar-icon"></span>
+        <h2 id="calendarTitle" class="calendar-title">Calendario Veterinaria</h2>
+      </div>
+
+      <div class="month-controls">
+        <button id="prevMonthBtn" class="month-btn" type="button" aria-label="Mes anterior">◀</button>
+        <div id="monthLabel" class="month-label"></div>
+        <button id="nextMonthBtn" class="month-btn" type="button" aria-label="Mes siguiente">▶</button>
+      </div>
+
+      <div class="weekdays" aria-hidden="true">
+        <div class="weekday">Dom</div>
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mié</div>
+        <div class="weekday">Jue</div>
+        <div class="weekday">Vie</div>
+        <div class="weekday">Sáb</div>
+      </div>
+
+      <div class="calendar-days" id="calendarDays"></div>
+    </section>
+  </main>
+
+  <!-- MODAL HORARIOS -->
+  <div class="modal-overlay" id="schedulesModal" aria-hidden="true">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="schedulesTitle">
+      <button class="modal-close" id="closeModal" type="button" aria-label="Cerrar">&times;</button>
+
+      <div class="modal-header">
+        <span class="modal-icon"></span>
+        <h2 id="schedulesTitle" class="modal-title">Horarios disponibles</h2>
+      </div>
+
+      <div class="selected-date" id="selectedDate"></div>
+
+      <div class="schedules-grid" id="schedulesGrid"></div>
+
+      <button class="confirm-button" id="confirmButton" type="button" disabled>Siguiente</button>
+    </div>
+  </div>
+
+  <!-- MODAL DATOS CLIENTE -->
+  <div class="modal-overlay" id="clientDataModal" aria-hidden="true">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="clientModalTitle">
+      <button class="modal-close" id="closeClientModal" type="button" aria-label="Cerrar">&times;</button>
+
+      <div class="modal-header">
+        <span class="modal-icon"></span>
+        <h2 id="clientModalTitle" class="modal-title">Confirma tus datos</h2>
+      </div>
+
+      <form id="clientDataForm" autocomplete="on">
+        <div class="form-group">
+          <label for="clientName">Nombre completo *</label>
+          <input class="form-control" type="text" id="clientName" name="clientName" disabled />
+        </div>
+
+        <div class="form-group">
+          <label for="clientEmail">Email *</label>
+          <input class="form-control" type="email" id="clientEmail" name="clientEmail" disabled />
+        </div>
+
+        <div class="form-group">
+          <label for="clientPhone">Teléfono *</label>
+          <input class="form-control" type="tel" id="clientPhone" name="clientPhone" required placeholder="+57 300 123 4567" />
+        </div>
+
+        <div class="form-group">
+          <label for="petSelect">Mascota *</label>
+          <select class="form-control" id="petSelect" name="petSelect" required>
+            <option value="">Selecciona una mascota</option>
+          </select>
+        </div>
+
+        <button type="submit" class="confirm-button">Confirmar cita</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    // ✅ Usar configuración dinámica del ambiente
+    const API_URL = window.VITALPET?.API_BASE || 'http://localhost:5000/api';
+
+    // IDs de servicios (deben coincidir con la BD)
+    // Veterinaria: 1, 2, 3, 4, 5, 6
+    // Estética: 7=Baño, 8=Peluquería, 9=Corte Uñas, 10=Limpieza Oídos, 11=Baño Medicado
+    const SERVICIOS = {
+      veterinaria: 1,
+      estetica: 8  // Peluquería Completa
+    };
+
+    // ✅ Esperar a que el DOM esté listo y Storage cargado
+    function initializeAuth() {
+      const navLogin = document.getElementById("nav-login");
+      const userProfile = document.getElementById("user-profile");
+      const profileBtn = document.getElementById("profile-btn");
+      const profileDropdown = document.getElementById("profile-dropdown");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      // ✅ Verificar token real
+      const token = Storage.getToken();
+      console.log(" Token en calendario:", token ? "Existe" : "No existe");
+      
+      if (token) {
+        navLogin.classList.add("hidden");
+        userProfile.classList.remove("hidden");
+        console.log(" Usuario logueado - mostrando perfil");
+        loadUserPets(); // Cargar mascotas del usuario
+      } else {
+        navLogin.classList.remove("hidden");
+        userProfile.classList.add("hidden");
+        console.log(" Usuario no logueado - mostrando login");
+      }
+
+      // Dropdown
+      if (profileBtn) {
+        profileBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle("active");
+        });
+
+        document.addEventListener("click", () => {
+          profileDropdown.classList.remove("active");
+        });
+
+        logoutBtn.addEventListener("click", () => {
+          Storage.clearAuth();
+          localStorage.removeItem("vitalpet_usuario");
+          window.location.href = "login.html";
+        });
+      }
+    }
+
+    // Ejecutar cuando el DOM esté listo
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeAuth);
+    } else {
+      initializeAuth();
+    }
+
+    // ============================================
+    // CARGAR MASCOTAS DEL USUARIO
+    // ============================================
+    async function loadUserPets() {
+      try {
+        const token = Storage.getToken();
+        if (!token) {
+          console.log(' Sin token, no se pueden cargar mascotas');
+          return;
+        }
+
+        console.log(' Token disponible, cargando mascotas...');
+
+        const response = await fetch(`${API_URL}/mascotas`, {
+          method: 'GET',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log(' Respuesta mascotas:', response.status);
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Error al cargar mascotas');
+        }
+
+        const data = await response.json();
+        // ✅ El endpoint devuelve directamente un array de mascotas
+        const mascotas = Array.isArray(data) ? data : (data.mascotas || []);
+        
+        // Guardar mascotas en variable global
+        window.userPets = mascotas;
+        console.log(' Mascotas cargadas:', mascotas);
+        
+        // Actualizar el select de mascotas si existe
+        if (mascotas.length > 0) {
+          updatePetsSelect(mascotas);
+        }
+      } catch (error) {
+        console.error(' Error cargando mascotas:', error);
+        window.userPets = [];
+      }
+    }
+
+    // ✅ Actualizar select de mascotas
+    function updatePetsSelect(mascotas) {
+      const petSelect = document.getElementById('petSelect');
+      if (petSelect && mascotas.length > 0) {
+        petSelect.innerHTML = `<option value="">Selecciona una mascota</option>`;
+        mascotas.forEach(mascota => {
+          const option = document.createElement("option");
+          option.value = mascota.id;
+          option.textContent = `${mascota.nombre} (${mascota.especie || 'Sin especificar'})`;
+          petSelect.appendChild(option);
+        });
+      }
+    }
+
+    // ============================================
+    // OBTENER DATOS DEL USUARIO
+    // ============================================
+    async function getUserData() {
+      try {
+        const token = Storage.getToken();
+        if (!token) return null;
+
+        const response = await fetch(`${API_URL}/usuarios/perfil`, {
+          method: 'GET',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar perfil');
+
+        const data = await response.json();
+        console.log(' Datos usuario cargados:', data);
+        return data.usuario || data;
+      } catch (error) {
+        console.error(' Error cargando usuario:', error);
+        return null;
+      }
+    }
+
+    // =========================
+    // 2) CALENDARIO - Validar fechas pasadas
+    // =========================
+
+    const calendarDays = document.getElementById("calendarDays");
+    const monthLabel = document.getElementById("monthLabel");
+    const calendarTitle = document.getElementById("calendarTitle");
+
+    const prevMonthBtn = document.getElementById("prevMonthBtn");
+    const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+    const serviceButtons = document.querySelectorAll(".service-btn");
+
+    let currentService = "veterinaria";
+
+    let viewDate = new Date(); // mes que se está mostrando
+    let selectedDay = null;
+
+    const monthNames = [
+      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    ];
+
+    function renderCalendar() {
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+
+      monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+      // primer día del mes
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      const startWeekDay = firstDay.getDay(); // 0 dom, 6 sáb
+      const totalDays = lastDay.getDate();
+
+      calendarDays.innerHTML = "";
+
+      // espacios vacíos
+      for (let i = 0; i < startWeekDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "calendar-day empty";
+        calendarDays.appendChild(empty);
+      }
+
+      // días
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dateObj = new Date(year, month, day);
+        const dateObjAtMidnight = new Date(dateObj);
+        dateObjAtMidnight.setHours(0, 0, 0, 0);
+
+        const dayEl = document.createElement("div");
+        dayEl.className = "calendar-day";
+        dayEl.textContent = day;
+
+        // ✅ VALIDAR FECHAS PASADAS
+        const isPast = dateObjAtMidnight < today;
+
+        // marcar hoy
+        const isToday =
+          dateObj.getFullYear() === today.getFullYear() &&
+          dateObj.getMonth() === today.getMonth() &&
+          dateObj.getDate() === today.getDate();
+
+        if (isToday) {
+          dayEl.classList.add("today");
+        } else if (isPast) {
+          // ✅ Desahabilitar fechas pasadas
+          dayEl.style.opacity = '0.4';
+          dayEl.style.cursor = 'not-allowed';
+          dayEl.style.pointerEvents = 'none';
+        }
+
+        if (!isPast) {
+          dayEl.addEventListener("click", () => {
+            selectedDay = dateObj;
+            document.querySelectorAll(".calendar-day").forEach(d => d.classList.remove("selected"));
+            dayEl.classList.add("selected");
+            openSchedulesModal(dateObj);
+          });
+        }
+
+        calendarDays.appendChild(dayEl);
+      }
+    }
+
+    prevMonthBtn.addEventListener("click", () => {
+      viewDate.setMonth(viewDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener("click", () => {
+      viewDate.setMonth(viewDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // =========================
+    // 3) MODAL HORARIOS
+    // =========================
+
+    const schedulesModal = document.getElementById("schedulesModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const schedulesGrid = document.getElementById("schedulesGrid");
+    const selectedDateText = document.getElementById("selectedDate");
+    const confirmButton = document.getElementById("confirmButton");
+
+    let selectedSchedule = null;
+
+    function openModal(modal) {
+      modal.classList.add("active");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove("active");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function formatDate(date) {
+      return date.toLocaleDateString("es-CO", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
+
+    // ✅ Obtener horarios disponibles del backend
+    async function getAvailableSchedules(serviceName, dateObj) {
+      try {
+        const servicioId = SERVICIOS[serviceName];
+        const fechaCita = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD
+
+        const response = await fetch(
+          `${API_URL}/citas/horarios-disponibles?servicio_id=${servicioId}&fecha_cita=${fechaCita}`
+        );
+
+        if (!response.ok) throw new Error('Error al obtener horarios');
+
+        const data = await response.json();
+        return data.horarios_disponibles || [];
+      } catch (error) {
+        console.error(' Error obteniendo horarios:', error);
+        return [];
+      }
+    }
+
+    // ✅ Convertir hora 24h a formato 12h (13:00 → 1:00 PM)
+    function convertirHora24a12(hora24) {
+      const [horas, minutos] = hora24.split(':').map(Number);
+      const periodos = horas >= 12 ? 'PM' : 'AM';  // Desde 12:00 en adelante es PM
+      const horas12 = horas === 0 ? 12 : horas > 12 ? horas - 12 : horas;
+      return `${horas12.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')} ${periodos}`;
+    }
+
+    function openSchedulesModal(dateObj) {
+      selectedSchedule = null;
+      confirmButton.disabled = true;
+
+      selectedDateText.textContent = `Fecha seleccionada: ${formatDate(dateObj)}`;
+      schedulesGrid.innerHTML = '<p style="text-align:center; color:#999;">Cargando horarios...</p>';
+
+      // ✅ Obtener horarios del backend
+      getAvailableSchedules(currentService, dateObj).then(schedules => {
+        schedulesGrid.innerHTML = "";
+
+        if (schedules.length === 0) {
+          schedulesGrid.innerHTML = '<p style="text-align:center; color:#999; padding:20px;">No hay horarios disponibles para esta fecha</p>';
+          return;
+        }
+
+        schedules.forEach((time) => {
+          const slot = document.createElement("div");
+          slot.className = "schedule-slot";
+          slot.textContent = convertirHora24a12(time); // Mostrar en 12 horas
+          slot.dataset.hora24 = time; // Guardar valor original en 24 horas
+
+          slot.addEventListener("click", () => {
+            document.querySelectorAll(".schedule-slot").forEach(s => s.classList.remove("selected"));
+            slot.classList.add("selected");
+            selectedSchedule = slot.dataset.hora24; // Usar valor 24h
+            confirmButton.disabled = false;
+          });
+
+          schedulesGrid.appendChild(slot);
+        });
+      });
+
+      openModal(schedulesModal);
+    }
+
+    closeModalBtn.addEventListener("click", () => closeModal(schedulesModal));
+
+    schedulesModal.addEventListener("click", (e) => {
+      if (e.target === schedulesModal) closeModal(schedulesModal);
+    });
+
+    // =========================
+    // 4) MODAL DATOS CLIENTE
+    // =========================
+
+    const clientDataModal = document.getElementById("clientDataModal");
+    const closeClientModalBtn = document.getElementById("closeClientModal");
+
+    const clientDataForm = document.getElementById("clientDataForm");
+    const clientName = document.getElementById("clientName");
+    const clientEmail = document.getElementById("clientEmail");
+    const clientPhone = document.getElementById("clientPhone");
+    const petSelect = document.getElementById("petSelect");
+
+    // ✅ Llenar datos del cliente logueado
+    async function fillClientData() {
+      try {
+        const token = Storage.getToken();
+        if (!token) return;
+
+        const userData = await getUserData();
+        if (userData) {
+          clientName.value = userData.nombre || '';
+          clientEmail.value = userData.email || '';
+          console.log(' Datos del usuario cargados');
+        }
+
+        // ✅ Llenar mascotas del usuario - usar el array ya cargado
+        if (window.userPets && window.userPets.length > 0) {
+          petSelect.innerHTML = `<option value="">Selecciona una mascota</option>`;
+          window.userPets.forEach(mascota => {
+            const option = document.createElement("option");
+            option.value = mascota.id;
+            option.textContent = `${mascota.nombre} (${mascota.especie || 'Sin especificar'})`;
+            petSelect.appendChild(option);
+          });
+          console.log(' Select de mascotas actualizado');
+        } else {
+          petSelect.innerHTML = `<option value="">No tienes mascotas registradas</option>`;
+          console.log(' El usuario no tiene mascotas');
+        }
+      } catch (error) {
+        console.error(' Error llenando datos:', error);
+      }
+    }
+
+    confirmButton.addEventListener("click", () => {
+      closeModal(schedulesModal);
+
+      // ✅ Verificar si hay sesión activa
+      const token = Storage.getToken();
+      if (!token) {
+        alert("Debes iniciar sesión para confirmar una cita.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      fillClientData();
+      openModal(clientDataModal);
+    });
+
+    closeClientModalBtn.addEventListener("click", () => closeModal(clientDataModal));
+
+    clientDataModal.addEventListener("click", (e) => {
+      if (e.target === clientDataModal) closeModal(clientDataModal);
+    });
+
+    // ✅ Enviar cita al backend
+    clientDataForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const token = Storage.getToken();
+      const mascotaId = petSelect.value;
+      const telefono = clientPhone.value.trim();
+
+      if (!mascotaId || !telefono) {
+        alert("Completa todos los campos necesarios");
+        return;
+      }
+
+      const citaData = {
+        mascota_id: mascotaId,
+        servicio_id: SERVICIOS[currentService],
+        fecha_cita: selectedDay.toISOString().split('T')[0],
+        hora_cita: selectedSchedule,
+        notas: `Teléfono: ${telefono}`
+      };
+
+      try {
+        const response = await fetch(`${API_URL}/citas`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(citaData)
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Error al crear cita');
+        }
+
+        const result = await response.json();
+        console.log(' Cita creada:', result);
+
+        // Mostrar confirmación con los datos
+        const mascota = window.userPets.find(m => m.id == mascotaId);
+        const hora12 = convertirHora24a12(selectedSchedule); // Convertir a 12h para mostrar
+        const mensajeConfirmacion = `
+ ¡Cita agendada exitosamente!
+
+ Detalles de tu cita:
+ Mascota: ${mascota.nombre}
+ Tu nombre: ${clientName.value}
+ Teléfono: ${telefono}
+ Fecha: ${selectedDay.toLocaleDateString('es-CO')}
+ Hora: ${hora12}
+ Servicio: ${currentService === 'veterinaria' ? 'Veterinaria' : 'Peluquería y Baño'}
+
+Tu cita está pendiente de confirmación por nuestro equipo.
+Te contactaremos pronto.
+        `;
+
+        alert(mensajeConfirmacion);
+        
+        closeModal(clientDataModal);
+        clientDataForm.reset();
+        window.userPets = window.userPets; // Reset
+
+      } catch (error) {
+        console.error(' Error:', error);
+        alert(`Error al crear cita: ${error.message}`);
+      }
+    });
+
+    // =========================
+    // 5) CAMBIO DE SERVICIO
+    // =========================
+
+    function updateServiceUI() {
+      if (currentService === "veterinaria") {
+        calendarTitle.textContent = " Calendario Veterinaria";
+      } else {
+        calendarTitle.textContent = " Calendario Peluquería y Baño";
+      }
+      renderCalendar(); // Actualizar calendario cuando cambia servicio
+    }
+
+    serviceButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        serviceButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        currentService = btn.dataset.service;
+        updateServiceUI();
+      });
+    });
+
+    // =========================
+    // 6) TECLA ESC CIERRA MODALES
+    // =========================
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal(schedulesModal);
+        closeModal(clientDataModal);
+        profileDropdown.classList.remove("active");
+      }
+    });
+
+    // Render inicial
+    updateServiceUI();
+    renderCalendar();
+  </script>
+</body>
+</html>
